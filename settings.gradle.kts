@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "MyPlantBuddy"
 include(":app")
- 
+include(":presentation")
+include(":domain")
+include(":data")
