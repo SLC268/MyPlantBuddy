@@ -7,8 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.sonyaclausen.myplantbuddy.screens.HomeScreen
 import com.sonyaclausen.myplantbuddy.screens.LogInScreen
+import com.sonyaclausen.myplantbuddy.screens.MainScreen
 import com.sonyaclausen.myplantbuddy.screens.MyPlantsScreen
 import com.sonyaclausen.myplantbuddy.screens.RegisterScreen
 import kotlinx.serialization.Serializable
@@ -59,9 +59,9 @@ fun AppNavHost(
         }
         navigation(startDestination = Home.toString(), route = Main.toString()) {
             composable(route = Home.toString()) {
-                HomeScreen(
+                MainScreen(
                     onMyPlantsClick = { navController.navigate(route = MyPlants.toString()) },
-                    modifier = modifier
+                    modifier = modifier,
                 )
             }
             composable(route = MyPlants.toString()) {
