@@ -10,8 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+
 @Composable
-fun LogInScreen(onLoginComplete: () -> Unit, modifier: Modifier) {
+fun RegisterScreen(onSignUpComplete: () -> Unit, modifier: Modifier) {
     Scaffold { innerPadding ->
         Column(
             modifier = modifier.padding(innerPadding),
@@ -19,7 +20,7 @@ fun LogInScreen(onLoginComplete: () -> Unit, modifier: Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Register screen")
-            Button(onClick = onLoginComplete) {
+            Button(onClick = onSignUpComplete) {
                 Text(text = "Go to home")
             }
         }

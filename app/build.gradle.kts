@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("plugin.serialization") version "1.8.0" // Add this line
 }
 
 android {
@@ -72,5 +73,6 @@ dependencies {
 
     //Navigation
     implementation(libs.androidx.navigation.compose)
-
+    // Serialization
+    implementation(libs.kotlinx.serialization.json)
 }
