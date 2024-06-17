@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyPlantBuddy</string>
+    <string name="home">Hjem</string>
+    <string name="calender">Kalender</string>
+    <string name="library">Bibliotek</string>
+    <string name="care_bot">Plejebot</string>
+    <string name="more">Mere</string>
+</resources>
