@@ -6,4 +6,7 @@
     <string name="library">Bibliotek</string>
     <string name="care_bot">Plejebot</string>
     <string name="more">Mere</string>
+    <string name="plant_name">Plantens navn</string>
+    <string name="home_greeting">Hej Planteplejer</string>
+    <string name="my_plants">Mine Planter</string>
 </resources>

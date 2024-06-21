@@ -5,4 +5,7 @@
     <string name="library">Library</string>
     <string name="care_bot">Care bot</string>
     <string name="more">More</string>
+    <string name="plant_name">Plant Name</string>
+    <string name="home_greeting">Hello Plant Carer!</string>
+    <string name="my_plants">My Plants</string>
 </resources>
