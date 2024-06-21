@@ -11,6 +11,7 @@ import com.sonyaclausen.myplantbuddy.screens.LogInScreen
 import com.sonyaclausen.myplantbuddy.screens.MainScreen
 import com.sonyaclausen.myplantbuddy.screens.MyPlantsScreen
 import com.sonyaclausen.myplantbuddy.screens.RegisterScreen
+import com.sonyaclausen.myplantbuddy.screens.camera.CameraRecogScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -34,7 +35,8 @@ object Home
 @Serializable
 object MyPlants
 
-/// TODO camera nav
+@Serializable
+object Camera
 
 //https://developer.android.com/guide/navigation/design/nested-graphs#compose
 @Composable
@@ -61,11 +63,22 @@ fun AppNavHost(
             composable(route = Home.toString()) {
                 MainScreen(
                     onMyPlantsClick = { navController.navigate(route = MyPlants.toString()) },
+                    onCameraClick = { navController.navigate(route = Camera.toString()) },
                     modifier = modifier,
                 )
             }
             composable(route = MyPlants.toString()) {
                 MyPlantsScreen(
+                    onBackPress = {
+                        navController.navigate(route = Home.toString()) {
+                            popUpTo(route = Home.toString()) { inclusive = true }
+                        }
+                    },
+                    modifier = modifier,
+                )
+            }
+            composable(route = Camera.toString()) {
+                CameraRecogScreen(
                     onBackPress = {
                         navController.navigate(route = Home.toString()) {
                             popUpTo(route = Home.toString()) { inclusive = true }

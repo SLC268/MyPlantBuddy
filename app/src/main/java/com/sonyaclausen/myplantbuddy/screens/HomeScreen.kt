@@ -1,14 +1,15 @@
 package com.sonyaclausen.myplantbuddy.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,28 +33,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sonyaclausen.myplantbuddy.R
+import androidx.compose.runtime.getValue
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+
 
 @Composable
-fun HomeScreen(onMyPlantsClick: () -> Unit, modifier: Modifier) {
-    ScreenContent()
-//    Column {
-//        Column(
-//            modifier = modifier,
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ) {
-//            Text(text = "Home screen")
-//            Button(onClick = onMyPlantsClick) {
-//                Text(text = "Go to my plants")
-//            }
-//        }
-//
-//    }
+fun HomeScreen(
+    onMyPlantsClick: () -> Unit,
+    onCameraClick: () -> Unit,
+    modifier: Modifier
+) {
+    ScreenContent(
+        onMyPlantsClick = onMyPlantsClick,
+        onCameraClick = onCameraClick,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenContent() {
+fun ScreenContent(
+    onMyPlantsClick: () -> Unit,
+    onCameraClick: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,10 +72,12 @@ fun ScreenContent() {
         },
         floatingActionButton = {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = onCameraClick,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
-                )
+                ),
+                shape = MaterialTheme.shapes.large,
+                contentPadding = PaddingValues(16.dp)
             ) {
                 Icon(Icons.Outlined.CameraAlt, contentDescription = "Add plant")
             }
@@ -97,9 +103,26 @@ fun ScreenContent() {
                     thickness = 3.dp
                 )
             }
+            /*
+            TODO get actual data and two cards
+             */
+            val list = listOf(
+                "Today",
+                "Scheduled"
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                list.forEach {
+                    TodayAndScheduledCards()
+                }
 
-            TodayAndScheduledCards()
-            MyPlantsBar()
+            }
+
+            MyPlantsBar(
+                onClick = onMyPlantsClick
+            )
         }
 
     }
@@ -120,19 +143,27 @@ private fun TodayAndScheduledCards() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
+            Row() {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(Icons.Default.CalendarToday, contentDescription = "Today")
+                }
+                Text(text = "XX")
+            }
             Text(text = "Today")
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MyPlantsBar() {
+private fun MyPlantsBar(onClick: () -> Unit) {
     Card(
         modifier = Modifier,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        )
+        ),
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier
@@ -153,9 +184,23 @@ private fun MyPlantsBar() {
     }
 }
 
+@Composable
+private fun WaterStreak() {
+    val composition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.water_streak
+    )
+    LottieAnimation(
+        composition = composition
+    )
+}
+
 
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(onMyPlantsClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth())
+    HomeScreen(
+        onMyPlantsClick = { /*TODO*/ },
+        onCameraClick = {},
+        modifier = Modifier.fillMaxWidth()
+    )
 }

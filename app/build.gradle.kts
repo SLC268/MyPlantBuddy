@@ -73,6 +73,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation( libs.androidx.material.icons.extended)
 
+    //lottiefiles
+    implementation(libs.android.lottie.compose)
+
     //Navigation
     implementation(libs.androidx.navigation.compose)
     // Serialization

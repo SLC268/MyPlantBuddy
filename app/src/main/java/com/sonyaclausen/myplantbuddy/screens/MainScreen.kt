@@ -36,7 +36,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int) {
 }
 
 @Composable
-fun MainScreen(onMyPlantsClick: () -> Unit, modifier: Modifier) {
+fun MainScreen(onMyPlantsClick: () -> Unit, onCameraClick: () -> Unit, modifier: Modifier) {
     val items = listOf(
         Screen.Home,
         Screen.Calender,
@@ -83,6 +83,7 @@ fun MainScreen(onMyPlantsClick: () -> Unit, modifier: Modifier) {
             composable(Screen.Home.route) {
                 HomeScreen(
                     onMyPlantsClick = onMyPlantsClick,
+                    onCameraClick = onCameraClick,
                     modifier = modifier,
                 )
             }
