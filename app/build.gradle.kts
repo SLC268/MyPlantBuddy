@@ -74,7 +74,7 @@ dependencies {
     implementation( libs.androidx.material.icons.extended)
 
     //lottiefiles
-    implementation(libs.android.lottie.compose)
+    //implementation(libs.android.lottie.compose)
 
     //Navigation
     implementation(libs.androidx.navigation.compose)

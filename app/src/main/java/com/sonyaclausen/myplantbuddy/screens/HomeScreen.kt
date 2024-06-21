@@ -34,10 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sonyaclausen.myplantbuddy.R
 import androidx.compose.runtime.getValue
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 
 
 @Composable
@@ -184,15 +180,15 @@ private fun MyPlantsBar(onClick: () -> Unit) {
     }
 }
 
-@Composable
-private fun WaterStreak() {
-    val composition by rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.water_streak
-    )
-    LottieAnimation(
-        composition = composition
-    )
-}
+//@Composable
+//private fun WaterStreak() {
+//    val composition by rememberLottieComposition(
+//        spec = LottieCompositionSpec.RawRes(R.raw.water_streak
+//    )
+//    LottieAnimation(
+//        composition = composition
+//    )
+//}
 
 
 @Preview
