@@ -16,4 +16,6 @@
     <string name="no_login">Gå videre uden at logge ind</string>
     <string name="username">Brugernavn</string>
     <string name="password">Kodeord</string>
+    <string name="today">I dag</string>
+    <string name="scheduled">Planlagt</string>
 </resources>

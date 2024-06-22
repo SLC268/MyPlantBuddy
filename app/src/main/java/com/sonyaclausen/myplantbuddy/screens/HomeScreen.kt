@@ -1,15 +1,22 @@
 package com.sonyaclausen.myplantbuddy.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,8 +35,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,6 +58,9 @@ fun HomeScreen(
     ScreenContent(
         onMyPlantsClick = onMyPlantsClick,
         onCameraClick = onCameraClick,
+        modifier = modifier,
+        waterToday = 3,
+        waterScheduled = 5
     )
 }
 
@@ -56,7 +68,10 @@ fun HomeScreen(
 @Composable
 fun ScreenContent(
     onMyPlantsClick: () -> Unit,
-    onCameraClick: () -> Unit
+    onCameraClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    waterToday: Int,
+    waterScheduled: Int
 ) {
     Scaffold(
         topBar = {
@@ -87,17 +102,20 @@ fun ScreenContent(
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding).fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
         ) {
-            Column {
+            Column(modifier = Modifier.padding(vertical = 24.dp)) {
                 Row {
                     Text(
                         text = stringResource(id = R.string.home_greeting),
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                        fontSize = 28.sp,
+                        color = MaterialTheme.colorScheme.primary,
+
+                        )
 
                 }
                 Divider(
@@ -106,22 +124,7 @@ fun ScreenContent(
                     thickness = 3.dp
                 )
             }
-            /*
-            TODO get actual data and two cards
-             */
-            val list = listOf(
-                "Today",
-                "Scheduled"
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                list.forEach {
-                    TodayAndScheduledCards()
-                }
-
-            }
+            TodayAndScheduledCards(waterToday = waterToday, waterScheduled = waterScheduled)
 
             MyPlantsBar(
                 onClick = onMyPlantsClick
@@ -134,31 +137,198 @@ fun ScreenContent(
     }
 }
 
+//@Composable
+//private fun TodayAndScheduledCards(totalWaterings: Int, titleId: Int, modifier: Modifier = Modifier) {
+//    val title = stringResource(id = titleId)
+//    val iconCondition =
+//        if (title == stringResource(id = R.string.today)) Icons.Default.CalendarToday else Icons.Default.Schedule
+//
+//    Card(
+//        modifier = Modifier,
+//        colors = CardDefaults.cardColors(
+//            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+//            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+//        )
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(4.dp),
+//            verticalArrangement = Arrangement.SpaceBetween,
+//        ) {
+//            Row {
+//                CircleBackgroundIcon(
+//                    icon = iconCondition,
+//                    modifier = Modifier
+//                        .fillMaxWidth(0.4f)
+//                        .aspectRatio(1f)
+//                        .background(
+//                            MaterialTheme.colorScheme.onPrimaryContainer,
+//                            shape = CircleShape
+//                        )
+//                )
+//                Text(
+//                    text = totalWaterings.toString(),
+//                    fontWeight = FontWeight.Medium,
+//                    style = MaterialTheme.typography.titleLarge
+//                )
+//            }
+//            Text(
+//                text = title,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(8.dp),
+//                textAlign = TextAlign.Center,
+//                fontWeight = FontWeight.Normal,
+//                style = MaterialTheme.typography.titleLarge
+//            )
+//        }
+//    }
+//}
+//
+//@Composable
+//private fun ShowTSCards(
+//    modifier: Modifier = Modifier,
+//    waterToday: Int,
+//    waterScheduled: Int
+//) {
+//    val list = listOf(
+//        R.string.today to waterToday,
+//        R.string.scheduled to waterScheduled
+//    )
+//
+//    Row(
+//        modifier = modifier,
+//        verticalAlignment = Alignment.CenterVertically,
+//        horizontalArrangement = Arrangement.SpaceBetween
+//    ) {
+//        list.forEachIndexed { index, (titleId, totalWaterings) ->
+//            TodayAndScheduledCards(
+//                totalWaterings = totalWaterings,
+//                titleId = titleId,
+//                modifier = Modifier
+//                    .weight(1f)
+//                    .aspectRatio(1f)
+//            )
+//            if (index == 0) {
+//                Spacer(Modifier.width(25.dp))
+//            }
+//        }
+//    }
+//
+//}
+
 @Composable
-private fun TodayAndScheduledCards() {
-    Card(
-        modifier = Modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-        )
+private fun TodayAndScheduledCards(
+    waterToday: Int,
+    waterScheduled: Int,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(
+        // Today card
+        Card(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+                .weight(1f)
+                .aspectRatio(1f),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         ) {
-            Row() {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(Icons.Default.CalendarToday, contentDescription = "Today")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row {
+                    CircleBackgroundIcon(
+                        icon = Icons.Default.CalendarToday,
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .background(
+                                MaterialTheme.colorScheme.onPrimaryContainer,
+                                shape = CircleShape
+                            )
+                        //fillMaxWidth(0.4f)
+                    )
+                    Text(
+                        text = waterToday.toString(),
+                        fontWeight = FontWeight.Medium,
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
                 }
-                Text(text = "XX")
+                Row {
+                    Text(
+                        text = stringResource(id = R.string.today),
+                        fontWeight = FontWeight.Normal,
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+
             }
-            Text(text = "Today")
+        }
+
+        Spacer(modifier = Modifier.width(25.dp))
+
+        // Scheduled card
+        Card(
+            modifier = Modifier
+                .weight(1f)
+                .aspectRatio(1f),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(4.dp),
+                verticalArrangement = Arrangement.SpaceBetween,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row {
+                    CircleBackgroundIcon(
+                        icon = Icons.Default.Schedule,
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                            .background(
+                                MaterialTheme.colorScheme.onPrimaryContainer,
+                                shape = CircleShape
+                            )
+                            .fillMaxWidth(0.4f)
+                    )
+                    Text(
+                        text = waterScheduled.toString(),
+                        fontWeight = FontWeight.Medium,
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+                Row {
+                    Text(
+                        text = stringResource(id = R.string.scheduled),
+                        fontWeight = FontWeight.Normal,
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+            }
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -174,7 +344,7 @@ private fun MyPlantsBar(onClick: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(8.dp),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
@@ -187,6 +357,21 @@ private fun MyPlantsBar(onClick: () -> Unit) {
             }
 
         }
+    }
+}
+
+@Composable
+private fun CircleBackgroundIcon(icon: ImageVector, modifier: Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.fillMaxSize(0.5f) // Icon takes 50% of the Box size
+        )
     }
 }
 
