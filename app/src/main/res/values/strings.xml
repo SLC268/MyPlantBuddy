@@ -9,4 +9,10 @@
     <string name="home_greeting">Hello Plant Carer!</string>
     <string name="my_plants">My Plants</string>
     <string name="watering_message">You have done %1$d waterings!</string>
+    <string name="create_account">Create Account</string>
+    <string name="forgot_password">Forgotten Password?</string>
+    <string name="login">Login</string>
+    <string name="no_login">Continue without logging in</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 </resources>

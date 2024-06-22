@@ -62,10 +62,13 @@ fun ScreenContent(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(id = R.string.home))
+                    Text(
+                        text = stringResource(id = R.string.home),
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 },
                 colors = topAppBarColors(
-                    containerColor = Color.Transparent,
+                    containerColor = Color.Transparent
                 )
 
             )
@@ -84,8 +87,8 @@ fun ScreenContent(
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.padding(innerPadding).fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Column {
                 Row {

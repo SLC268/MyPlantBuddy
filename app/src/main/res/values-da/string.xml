@@ -10,4 +10,10 @@
     <string name="home_greeting">Hej Planteplejer</string>
     <string name="my_plants">Mine Planter</string>
     <string name="watering_message">Du har vandet %1$d gange!!</string>
+    <string name="create_account">Lav en konto</string>
+    <string name="forgot_password">Glemt kodeord?</string>
+    <string name="login">Log ind</string>
+    <string name="no_login">Gå videre uden at logge ind</string>
+    <string name="username">Brugernavn</string>
+    <string name="password">Kodeord</string>
 </resources>

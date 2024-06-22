@@ -45,13 +45,13 @@ fun AppNavHost(
     navController: NavHostController = rememberNavController(),
 ) {
     NavHost(navController, startDestination = Auth.toString(), modifier = modifier) {
-        navigation(startDestination = Register.toString(), route = Auth.toString()) {
-            composable(route = Register.toString()) {
-                RegisterScreen(
-                    onSignUpComplete = { navController.navigate(route = Main.toString()) },
-                    modifier = modifier
-                )
-            }
+        navigation(startDestination = Login.toString(), route = Auth.toString()) {
+//            composable(route = Register.toString()) {
+//                RegisterScreen(
+//                    onSignUpComplete = { navController.navigate(route = Main.toString()) },
+//                    modifier = modifier
+//                )
+//            }
             composable(route = Login.toString()) {
                 LogInScreen(
                     onLoginComplete = { navController.navigate(route = Main.toString()) },

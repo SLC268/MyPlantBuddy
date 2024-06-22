@@ -1,27 +1,163 @@
 package com.sonyaclausen.myplantbuddy.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.sonyaclausen.myplantbuddy.R
 
 @Composable
 fun LogInScreen(onLoginComplete: () -> Unit, modifier: Modifier) {
-    Scaffold { innerPadding ->
+    ScreenContent(
+        onLoginComplete = onLoginComplete,
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ScreenContent(
+    onLoginComplete: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.app_name),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+
+                    )
+                },
+                colors = topAppBarColors(
+                    containerColor = Color.Transparent,
+                )
+            )
+        }
+    ) { innerPadding ->
         Column(
-            modifier = modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Register screen")
-            Button(onClick = onLoginComplete) {
-                Text(text = "Go to home")
-            }
+            PlantsWateringAnimation()
+            LoginFields()
+            LoginButtons(
+                onClick = onLoginComplete
+            )
         }
     }
+}
+
+@Composable
+private fun LoginFields() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text = stringResource(id = R.string.username)) },
+            modifier = Modifier
+                .padding(4.dp)
+                .width(250.dp)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = { Text(text= stringResource(id = R.string.password)) },
+            modifier = Modifier
+                .padding(4.dp)
+                .width(250.dp)
+        )
+    }
+}
+
+@Composable
+private fun LoginButtons(onClick: () -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Button(
+            onClick = { /* TODO */ },
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+        ) {
+            Text(text = stringResource(id =R.string.login))
+        }
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+        ) {
+            Text(text = stringResource(id = R.string.no_login))
+        }
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(
+            text = stringResource(id = R.string.create_account),
+            color = Color.Gray,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .clickable { /* TODO */ }
+                .padding(16.dp)
+        )
+        Text(
+            text = stringResource(id = R.string.forgot_password),
+            color = Color.Gray,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable { /* TODO */ })
+    }
+}
+
+@Composable
+private fun PlantsWateringAnimation() {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.watering_plants)
+    )
+
+    LottieAnimation(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        modifier = Modifier
+            .padding(4.dp)
+            .size(250.dp)
+    )
+}
+
+@Preview
+@Composable
+fun LogInScreenPreview() {
+    LogInScreen(onLoginComplete = {}, modifier = Modifier)
 }
