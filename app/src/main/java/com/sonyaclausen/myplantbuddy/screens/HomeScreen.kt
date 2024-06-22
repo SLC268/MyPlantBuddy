@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,8 +33,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.sonyaclausen.myplantbuddy.R
-import androidx.compose.runtime.getValue
 
 
 @Composable
@@ -119,6 +123,9 @@ fun ScreenContent(
             MyPlantsBar(
                 onClick = onMyPlantsClick
             )
+
+            WaterStreakAnimation()
+            WaterStreakText()
         }
 
     }
@@ -180,15 +187,28 @@ private fun MyPlantsBar(onClick: () -> Unit) {
     }
 }
 
-//@Composable
-//private fun WaterStreak() {
-//    val composition by rememberLottieComposition(
-//        spec = LottieCompositionSpec.RawRes(R.raw.water_streak
-//    )
-//    LottieAnimation(
-//        composition = composition
-//    )
-//}
+@Composable
+private fun WaterStreakAnimation() {
+    val composition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.water_streak)
+    )
+
+    LottieAnimation(
+        composition = composition,
+        modifier = Modifier.fillMaxWidth(),
+        iterations = LottieConstants.IterateForever
+    )
+}
+
+@Composable
+private fun WaterStreakText() {
+    val waterings = 3
+    Text(
+        text = stringResource(id = R.string.watering_message, waterings),
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Bold,
+    )
+}
 
 
 @Preview

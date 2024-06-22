@@ -9,4 +9,5 @@
     <string name="plant_name">Plantens navn</string>
     <string name="home_greeting">Hej Planteplejer</string>
     <string name="my_plants">Mine Planter</string>
+    <string name="watering_message">Du har vandet %1$d gange!!</string>
 </resources>
