@@ -3,7 +3,7 @@
     <string name="home">Home</string>
     <string name="calender">Calender</string>
     <string name="library">Library</string>
-    <string name="care_bot">Care bot</string>
+    <string name="care_bot">CareBot</string>
     <string name="more">More</string>
     <string name="plant_name">Plant Name</string>
     <string name="home_greeting">Hello Plant Carer!</string>
@@ -17,4 +17,9 @@
     <string name="password">Password</string>
     <string name="today">Today</string>
     <string name="scheduled">Scheduled</string>
+    <string name="switch_lang">Switch language</string>
+    <string name="current_lang">Current language: </string>
+    <string name="profile">Profile</string>
+    <string name="community">Community</string>
+    <string name="saved">Saved</string>
 </resources>

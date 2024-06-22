@@ -73,6 +73,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation( libs.androidx.material.icons.extended)
 
+    implementation ("com.google.accompanist:accompanist-coil:0.13.0")
+    implementation ("io.coil-kt:coil-compose:2.2.2")
+    implementation ("io.coil-kt:coil-svg:2.2.2")
+
     //lottiefiles
     //implementation(libs.android.lottie.compose)
     implementation ("com.airbnb.android:lottie-compose:4.2.2")

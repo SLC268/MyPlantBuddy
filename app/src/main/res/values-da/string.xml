@@ -18,4 +18,9 @@
     <string name="password">Kodeord</string>
     <string name="today">I dag</string>
     <string name="scheduled">Planlagt</string>
+    <string name="switch_lang">Skift sprog</string>
+    <string name="current_lang">Nuværende sprog: </string>
+    <string name="profile">Profil</string>
+    <string name="community">Fællesskab</string>
+    <string name="saved">Gemt</string>
 </resources>

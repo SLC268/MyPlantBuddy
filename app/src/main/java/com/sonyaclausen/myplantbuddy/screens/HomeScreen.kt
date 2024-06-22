@@ -66,7 +66,7 @@ fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScreenContent(
+private fun ScreenContent(
     onMyPlantsClick: () -> Unit,
     onCameraClick: () -> Unit,
     modifier: Modifier = Modifier,
