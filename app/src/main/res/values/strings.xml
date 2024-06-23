@@ -22,4 +22,5 @@
     <string name="profile">Profile</string>
     <string name="community">Community</string>
     <string name="saved">Saved</string>
+    <string name="email">Email</string>
 </resources>
