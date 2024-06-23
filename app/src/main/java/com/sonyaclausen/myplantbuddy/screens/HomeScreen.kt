@@ -10,11 +10,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.CameraAlt
@@ -24,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -51,9 +53,7 @@ import com.sonyaclausen.myplantbuddy.R
 
 @Composable
 fun HomeScreen(
-    onMyPlantsClick: () -> Unit,
-    onCameraClick: () -> Unit,
-    modifier: Modifier
+    onMyPlantsClick: () -> Unit, onCameraClick: () -> Unit, modifier: Modifier
 ) {
     ScreenContent(
         onMyPlantsClick = onMyPlantsClick,
@@ -73,34 +73,37 @@ private fun ScreenContent(
     waterToday: Int,
     waterScheduled: Int
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.home),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                },
-                colors = topAppBarColors(
-                    containerColor = Color.Transparent
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = R.string.home),
+                    color = MaterialTheme.colorScheme.primary
                 )
-
+            }, colors = topAppBarColors(
+                containerColor = Color.Transparent
             )
-        },
-        floatingActionButton = {
-            Button(
-                onClick = onCameraClick,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
-                shape = MaterialTheme.shapes.large,
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                Icon(Icons.Outlined.CameraAlt, contentDescription = "Add plant")
-            }
+
+        )
+    }, floatingActionButton = {
+        FloatingActionButton(
+            onClick =onCameraClick,
+        ) {
+            Icon(Icons.Outlined.CameraAlt, contentDescription = "Add plant")
         }
-    ) { innerPadding ->
+
+//        Button(
+//            elevation = ButtonDefaults.buttonElevation(defaultElevation = 10.dp),
+//            onClick = onCameraClick,
+//            colors = ButtonDefaults.buttonColors(
+//                containerColor = MaterialTheme.colorScheme.primary
+//            ),
+//            shape = MaterialTheme.shapes.large,
+//            contentPadding = PaddingValues(16.dp)
+//        ) {
+//            Icon(Icons.Outlined.CameraAlt, contentDescription = "Add plant")
+//        }
+    }) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -130,8 +133,14 @@ private fun ScreenContent(
                 onClick = onMyPlantsClick
             )
 
-            WaterStreakAnimation()
-            WaterStreakText()
+            Box(contentAlignment = Alignment.Center) {
+                WaterStreakAnimation()
+                WaterStreakText(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 30.dp)
+                )
+            }
         }
 
     }
@@ -220,20 +229,16 @@ private fun ScreenContent(
 
 @Composable
 private fun TodayAndScheduledCards(
-    waterToday: Int,
-    waterScheduled: Int,
-    modifier: Modifier = Modifier
+    waterToday: Int, waterScheduled: Int, modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier, verticalAlignment = Alignment.CenterVertically
     ) {
         // Today card
         Card(
             modifier = Modifier
                 .weight(1f)
-                .aspectRatio(1f),
-            colors = CardDefaults.cardColors(
+                .aspectRatio(1f), colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer
             )
@@ -251,8 +256,7 @@ private fun TodayAndScheduledCards(
                         modifier = Modifier
                             .aspectRatio(1f)
                             .background(
-                                MaterialTheme.colorScheme.onPrimaryContainer,
-                                shape = CircleShape
+                                MaterialTheme.colorScheme.onPrimaryContainer, shape = CircleShape
                             )
                         //fillMaxWidth(0.4f)
                     )
@@ -283,8 +287,7 @@ private fun TodayAndScheduledCards(
         Card(
             modifier = Modifier
                 .weight(1f)
-                .aspectRatio(1f),
-            colors = CardDefaults.cardColors(
+                .aspectRatio(1f), colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer
             )
@@ -302,8 +305,7 @@ private fun TodayAndScheduledCards(
                         modifier = Modifier
                             .aspectRatio(1f)
                             .background(
-                                MaterialTheme.colorScheme.onPrimaryContainer,
-                                shape = CircleShape
+                                MaterialTheme.colorScheme.onPrimaryContainer, shape = CircleShape
                             )
                             .fillMaxWidth(0.4f)
                     )
@@ -334,12 +336,10 @@ private fun TodayAndScheduledCards(
 @Composable
 private fun MyPlantsBar(onClick: () -> Unit) {
     Card(
-        modifier = Modifier,
-        colors = CardDefaults.cardColors(
+        modifier = Modifier, colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        ),
-        onClick = onClick
+        ), onClick = onClick
     ) {
         Column(
             modifier = Modifier
@@ -353,7 +353,7 @@ private fun MyPlantsBar(onClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = stringResource(id = R.string.my_plants), fontWeight = FontWeight.Bold)
-                Icon(Icons.Default.ArrowForward, contentDescription = "To My plants")
+                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "To My plants")
             }
 
         }
@@ -363,8 +363,7 @@ private fun MyPlantsBar(onClick: () -> Unit) {
 @Composable
 private fun CircleBackgroundIcon(icon: ImageVector, modifier: Modifier) {
     Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
+        contentAlignment = Alignment.Center, modifier = modifier
     ) {
         Icon(
             imageVector = icon,
@@ -383,18 +382,22 @@ private fun WaterStreakAnimation() {
 
     LottieAnimation(
         composition = composition,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp),
         iterations = LottieConstants.IterateForever
     )
 }
 
 @Composable
-private fun WaterStreakText() {
+private fun WaterStreakText(modifier: Modifier = Modifier) {
     val waterings = 3
     Text(
         text = stringResource(id = R.string.watering_message, waterings),
-        fontSize = 24.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Bold,
+        color = Color.Black,
+        modifier = modifier
     )
 }
 
@@ -402,8 +405,7 @@ private fun WaterStreakText() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(
-        onMyPlantsClick = { /*TODO*/ },
+    HomeScreen(onMyPlantsClick = { /*TODO*/ },
         onCameraClick = {},
         modifier = Modifier.fillMaxWidth()
     )
