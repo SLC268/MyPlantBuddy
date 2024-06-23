@@ -43,13 +43,13 @@ import androidx.compose.ui.unit.dp
 import com.sonyaclausen.myplantbuddy.R
 
 @Composable
-fun EditProfileScreen() {
-    ScreenContent()
+fun EditProfileScreen(onCancelClick: () -> Unit) {
+    ScreenContent(onCancelClick = onCancelClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ScreenContent() {
+private fun ScreenContent(onCancelClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -81,7 +81,7 @@ private fun ScreenContent() {
             EditProfileDetails()
             ShowHidePassword(label = stringResource(id = R.string.old_password))
             ShowHidePassword(label = stringResource(id = R.string.new_password))
-            EditButtons()
+            EditButtons(onCancelClick = onCancelClick)
         }
 
     }
@@ -118,10 +118,10 @@ private fun EditProfileDetails(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun EditButtons() {
+private fun EditButtons(onCancelClick: () -> Unit) {
     //TODO add verification
     Row {
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = onCancelClick) {
             Text(text = stringResource(id = R.string.cancel))
 
         }
@@ -171,5 +171,5 @@ private fun ShowHidePassword(label: String) {
 @Preview
 @Composable
 fun PreviewEditProfileScreen() {
-    EditProfileScreen()
+    EditProfileScreen(onCancelClick = {})
 }

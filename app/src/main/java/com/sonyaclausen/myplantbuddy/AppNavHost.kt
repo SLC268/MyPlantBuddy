@@ -7,10 +7,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.sonyaclausen.myplantbuddy.screens.CareBotScreen
+import com.sonyaclausen.myplantbuddy.screens.CommunityScreen
+import com.sonyaclausen.myplantbuddy.screens.EditProfileScreen
 import com.sonyaclausen.myplantbuddy.screens.LogInScreen
 import com.sonyaclausen.myplantbuddy.screens.MainScreen
 import com.sonyaclausen.myplantbuddy.screens.MyPlantsScreen
-import com.sonyaclausen.myplantbuddy.screens.RegisterScreen
+import com.sonyaclausen.myplantbuddy.screens.ProfileScreen
+import com.sonyaclausen.myplantbuddy.screens.SavedSearchesScreen
 import com.sonyaclausen.myplantbuddy.screens.camera.CameraRecogScreen
 import kotlinx.serialization.Serializable
 
@@ -48,10 +52,13 @@ object Profile
 object Community
 
 @Serializable
-object Saved
+object SavedSearches
 
 @Serializable
 object CareBot
+
+@Serializable
+object EditProfile
 
 
 //https://developer.android.com/guide/navigation/design/nested-graphs#compose
@@ -77,11 +84,17 @@ fun AppNavHost(
         }
         navigation(startDestination = Home.toString(), route = Main.toString()) {
             composable(route = Home.toString()) {
-                MainScreen(
-                    onMyPlantsClick = { navController.navigate(route = MyPlants.toString()) },
+                MainScreen(onMyPlantsClick = { navController.navigate(route = MyPlants.toString()) },
                     onCameraClick = { navController.navigate(route = Camera.toString()) },
                     modifier = modifier,
-                )
+                    onRouteClick = {
+                        when (it) {
+                            CareBot.toString() -> navController.navigate(route = CareBot.toString())
+                            Profile.toString() -> navController.navigate(route = Profile.toString())
+                            Community.toString() -> navController.navigate(route = Community.toString())
+                            SavedSearches.toString() -> navController.navigate(route = SavedSearches.toString())
+                        }
+                    })
             }
             composable(route = MyPlants.toString()) {
                 MyPlantsScreen(
@@ -102,6 +115,25 @@ fun AppNavHost(
                     },
                     modifier = modifier,
                 )
+            }
+            composable(route = CareBot.toString()) {
+                CareBotScreen()
+            }
+            composable(route = Profile.toString()) {
+                ProfileScreen( onEditClick = { navController.navigate(route = EditProfile.toString()) })
+            }
+            composable(route = Community.toString()) {
+                CommunityScreen()
+            }
+            composable(route = SavedSearches.toString()) {
+                SavedSearchesScreen()
+            }
+            composable(route = EditProfile.toString()) {
+                EditProfileScreen(onCancelClick = {
+                    navController.navigate(route = Profile.toString()) {
+                        popUpTo(route = Profile.toString()) { inclusive = true }
+                    }
+                })
             }
         }
     }

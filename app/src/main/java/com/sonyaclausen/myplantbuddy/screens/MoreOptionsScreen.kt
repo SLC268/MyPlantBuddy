@@ -5,11 +5,13 @@ package com.sonyaclausen.myplantbuddy.screens
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,19 +25,27 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sonyaclausen.myplantbuddy.Camera
+import com.sonyaclausen.myplantbuddy.CareBot
+import com.sonyaclausen.myplantbuddy.Community
+import com.sonyaclausen.myplantbuddy.Profile
 import com.sonyaclausen.myplantbuddy.R
+import com.sonyaclausen.myplantbuddy.SavedSearches
 import com.sonyaclausen.myplantbuddy.generic.MoreOptionsCard
 import java.util.Locale
 
 @Composable
-fun MoreOptionsScreen(selectedLocale: Locale, onClick: (Locale) -> Unit, onRouteClick: (String) -> Unit) {
+fun MoreOptionsScreen(
+    selectedLocale: Locale,
+    onClick: (Locale) -> Unit,
+    onRouteClick: (String) -> Unit
+) {
     ScreenContent(selectedLocale = selectedLocale, onClick = onClick, onRouteClick = onRouteClick)
 }
 
@@ -69,7 +79,7 @@ private fun ScreenContent(
             CardGridOptions(
                 cards = cardsList(),
                 onCardClick = {
-                    onRouteClick(it.toString())
+                    onRouteClick(it.route)
                 }
             )
 
@@ -114,12 +124,20 @@ private fun cardsList(): List<MenuOption> {
 private fun SwitchLanguageToggle(selectedLocale: Locale, onClick: (Locale) -> Unit) {
     val list = listOf(Locale("da"), Locale("en"))
 
-    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 18.dp)
+    ) {
         Column {
             Text(text = stringResource(id = R.string.current_lang) + selectedLocale.toLanguageTag())
             Text(text = stringResource(id = R.string.switch_lang))
         }
-        Column {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterEnd
+        ) {
             Row {
                 list.forEach {
                     Button(onClick = {
@@ -136,22 +154,17 @@ private fun SwitchLanguageToggle(selectedLocale: Locale, onClick: (Locale) -> Un
 @Preview
 @Composable
 fun MoreOptionsScreenPreview() {
-    MoreOptionsScreen(selectedLocale = Locale("en"), onRouteClick = {""}, onClick = {})
+    MoreOptionsScreen(selectedLocale = Locale("en"), onRouteClick = { "" }, onClick = {})
 }
 
-//data class CardItem(val imageRes: Int, val text: String)
 
-//sealed class AppState(@DrawableRes val imageRes: Int, @StringRes val text: Int) {
-//    data class CareBot() : AppState(R.drawable.bot_icon, R.string.care_bot)
-//    data class Success : AppState()
-//    data class Error : AppState()
-//}
-
-
-// Using an enum
-enum class MenuOption(@DrawableRes val imageRes: Int, @StringRes val titleRes: Int, val route: String? = null) {
-    CARE_BOT(R.drawable.bot_icon, R.string.care_bot, "CareBot"),
-    PROFILE(R.drawable.profile, R.string.profile, "Profile"),
-    COMMUNITY(R.drawable.community_icon, R.string.community, "Community"),
-    SAVED(R.drawable.saved_heart, R.string.saved, "Saved"),
+enum class MenuOption(
+    @DrawableRes val imageRes: Int,
+    @StringRes val titleRes: Int,
+    val route: String
+) {
+    CARE_BOT(R.drawable.bot_icon, R.string.care_bot, CareBot.toString()),
+    PROFILE(R.drawable.profile, R.string.profile, Profile.toString()),
+    COMMUNITY(R.drawable.community_icon, R.string.community, Community.toString()),
+    SAVED_SEARCHES(R.drawable.saved_heart, R.string.saved, SavedSearches.toString()),
 }

@@ -43,13 +43,13 @@ import androidx.compose.ui.unit.dp
 import com.sonyaclausen.myplantbuddy.R
 
 @Composable
-fun ProfileScreen() {
-    ScreenContent()
+fun ProfileScreen( onEditClick: () -> Unit) {
+    ScreenContent(onEditClick = onEditClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ScreenContent() {
+private fun ScreenContent(onEditClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -86,16 +86,16 @@ private fun ScreenContent() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ProfileDetails(modifier = Modifier.padding(innerPadding))
-
+            ProfileDetails(
+                modifier = Modifier.padding(innerPadding),
+                onEditClick = onEditClick
+            )
         }
-
-
     }
 }
 
 @Composable
-private fun ProfileDetails(modifier: Modifier = Modifier) {
+private fun ProfileDetails(modifier: Modifier = Modifier, onEditClick: () -> Unit) {
 
     //TODO get actual data to fill fields
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -121,11 +121,12 @@ private fun ProfileDetails(modifier: Modifier = Modifier) {
                 .width(250.dp)
         )
         ShowHidePassword()
-        Button(onClick = { /*TODO*/ }) {
-            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit Icon")
+        Button(onClick = onEditClick) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "Edit Icon"
+            )
         }
-
-
     }
 }
 
@@ -161,11 +162,10 @@ private fun ShowHidePassword() {
             }
         }
     )
-
 }
 
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen(onEditClick = {})
 }

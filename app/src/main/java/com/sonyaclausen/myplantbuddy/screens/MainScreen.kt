@@ -36,7 +36,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int) {
 }
 
 @Composable
-fun MainScreen(onMyPlantsClick: () -> Unit, onCameraClick: () -> Unit, modifier: Modifier) {
+fun MainScreen(onMyPlantsClick: () -> Unit, onCameraClick: () -> Unit, modifier: Modifier, onRouteClick: (String) -> Unit) {
     val items = listOf(
         Screen.Home,
         Screen.Calender,
@@ -88,12 +88,12 @@ fun MainScreen(onMyPlantsClick: () -> Unit, onCameraClick: () -> Unit, modifier:
                 )
             }
             composable(Screen.Library.route) { LibraryScreen() }
-            composable(Screen.Calender.route) { WeekCalendarScreen() }
+            composable(Screen.Calender.route) { MonthCalendarScreen() }
             composable(Screen.More.route) {
                 MoreOptionsScreen(selectedLocale, onClick = {
                     selectedLocale = it
                     updateLocale(context = context, locale = it)
-                })
+                }, onRouteClick = onRouteClick)
             }
         }
     }
