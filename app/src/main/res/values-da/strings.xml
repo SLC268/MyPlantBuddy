@@ -25,4 +25,8 @@
     <string name="saved">Gemt</string>
     <string name="email">Email</string>
     <string name="edit_profile">Rediger Profil</string>
+    <string name="save">Gem</string>
+    <string name="cancel">Annuller</string>
+    <string name="old_password">Gammelt kodeord</string>
+    <string name="new_password">Nyt kodeord</string>
 </resources>

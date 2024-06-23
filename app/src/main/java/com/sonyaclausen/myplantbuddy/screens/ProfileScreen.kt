@@ -153,21 +153,11 @@ private fun ShowHidePassword() {
         },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
-            if (showPassword) {
-                IconButton(onClick = { showPassword = false }) {
-                    Icon(
-                        imageVector = Icons.Filled.Visibility,
-                        contentDescription = "hide_password"
-                    )
-                }
-            } else {
-                IconButton(
-                    onClick = { showPassword = true }) {
-                    Icon(
-                        imageVector = Icons.Filled.VisibilityOff,
-                        contentDescription = "hide_password"
-                    )
-                }
+            IconButton(onClick = { showPassword = !showPassword }) {
+                Icon(
+                    imageVector = if (showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                    contentDescription = if (showPassword) "Hide password" else "Show password"
+                )
             }
         }
     )

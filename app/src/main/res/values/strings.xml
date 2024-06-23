@@ -24,4 +24,8 @@
     <string name="saved">Saved</string>
     <string name="email">Email</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
 </resources>
