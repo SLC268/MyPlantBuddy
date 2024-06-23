@@ -38,6 +38,22 @@ object MyPlants
 @Serializable
 object Camera
 
+@Serializable
+object MoreOptions
+
+@Serializable
+object Profile
+
+@Serializable
+object Community
+
+@Serializable
+object Saved
+
+@Serializable
+object CareBot
+
+
 //https://developer.android.com/guide/navigation/design/nested-graphs#compose
 @Composable
 fun AppNavHost(
