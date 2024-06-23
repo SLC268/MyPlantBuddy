@@ -6,19 +6,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,9 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.sonyaclausen.myplantbuddy.R
+import com.sonyaclausen.myplantbuddy.generic.MoreOptionsCard
 import java.util.Locale
 
 @Composable
@@ -73,7 +75,7 @@ private fun ScreenContent(
             SwitchLanguageToggle(selectedLocale = selectedLocale, onClick = onClick)
             Spacer(modifier = Modifier.height(16.dp))
             CardGridOptions(
-                cards = CardsList(),
+                cards = cardsList(),
                 onCardClick = {}
             )
 
@@ -87,66 +89,35 @@ private fun CardGridOptions(
     cards: List<CardItem>,
     onCardClick: (CardItem) -> Unit
 ) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        for (i in cards.indices.chunked(3)) {
-            Row(Modifier.fillMaxWidth()) {
-                for (card in cards.subList(i.first(), i.last() + 1)) {
-                    CardItem(card = card, onClick = { onCardClick(card) })
-                }
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}
-
-@Composable
-//private fun CardItem(card: CardItem, onClick: () -> Unit) {
-//    Button(onClick = onClick) {
-//        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-//            Icon(
-//                painter = painterResource(id = card.imageRes),
-//                contentDescription = null,
-//                modifier = Modifier.size(48.dp)
-//            )
-//            Text(text = card.text)
-//        }
-//    }
-//}
-
-fun CardItem(card: CardItem, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .clickable(onClick = onClick),
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(16.dp),
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.spacedBy(40.dp),
+        verticalArrangement = Arrangement.spacedBy(34.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = rememberAsyncImagePainter(card.imageRes),
-                contentDescription = null, // You can provide a meaningful description here
-                modifier = Modifier
-                    .size(120.dp)
-                    .clip(shape = RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = card.text, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)
+        items(cards) { card ->
+            CardItem(card = card, onClick = { onCardClick(card) })
         }
     }
 }
 
 @Composable
-private fun CardsList(): List<CardItem> {
+private fun CardItem(card: CardItem, onClick: () -> Unit) {
+    MoreOptionsCard(
+        image = painterResource(id = card.imageRes),
+        title = card.text,
+        onClick = onClick
+    )
+}
+
+@Composable
+private fun cardsList(): List<CardItem> {
     return listOf(
-        CardItem(R.raw.bot_blink, stringResource(id = R.string.care_bot)),
-        CardItem(R.raw.profile, stringResource(id = R.string.profile)),
-        CardItem(R.raw.community_hands, stringResource(id = R.string.community)),
-        CardItem(R.raw.saved_heart, stringResource(id = R.string.saved)),
+        CardItem(R.drawable.bot_icon, stringResource(id = R.string.care_bot)),
+        CardItem(R.drawable.profile, stringResource(id = R.string.profile)),
+        CardItem(R.drawable.community_icon, stringResource(id = R.string.community)),
+        CardItem(R.drawable.saved_heart, stringResource(id = R.string.saved)),
     )
 }
 
