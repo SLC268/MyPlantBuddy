@@ -42,7 +42,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sonyaclausen.myplantbuddy.R
+import com.sonyaclausen.myplantbuddy.generic.WateringCard
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -51,7 +53,8 @@ import java.util.Locale
 fun MonthCalendarScreen() {
     //TODO: remove when actual data comes in
     val events = listOf(
-        Event(Date(), "Event 1"), Event(Date(), "Event 2")
+        WaterEvent(Date(), "Plant 1", 100),
+        WaterEvent(Date(), "Plant 2", 200)
     )
 
     ScreenContent(events)
@@ -59,9 +62,9 @@ fun MonthCalendarScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-private fun ScreenContent(events: List<Event>) {
+private fun ScreenContent(events: List<WaterEvent>) {
     val currentMonth = remember { mutableStateOf(Calendar.getInstance()) }
-    val selectedDateEvents = remember { mutableStateOf<List<Event>>(listOf()) }
+    val selectedDateEvents = remember { mutableStateOf<List<WaterEvent>>(listOf()) }
 
     val calendarRange = 1200
     val initialPage = calendarRange / 2
@@ -133,12 +136,12 @@ private fun ScreenContent(events: List<Event>) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CalendarWithEvents(
-    events: List<Event>,
+    events: List<WaterEvent>,
     onNextClick: (Int) -> Unit,
     onPreviousClick: (Int) -> Unit,
     pagerState: PagerState,
     currentMonth: MutableState<Calendar>,
-    selectedDateEvents: MutableState<List<Event>>,
+    selectedDateEvents: MutableState<List<WaterEvent>>,
     initialPage: Int,
 ) {
     HorizontalPager(
@@ -209,9 +212,9 @@ private fun CalenderControls(
 
 @Composable
 private fun CalendarGrid(
-    events: List<Event>,
+    events: List<WaterEvent>,
     currentMonth: Calendar,
-    selectedDateEvents: MutableState<List<Event>>
+    selectedDateEvents: MutableState<List<WaterEvent>>
 ) {
     val daysInMonth = currentMonth.getActualMaximum(Calendar.DAY_OF_MONTH)
     val firstDayOfMonth = currentMonth.clone() as Calendar
@@ -283,7 +286,9 @@ private fun CalendarGrid(
 }
 
 @Composable
-private fun EventList(events: List<Event>) {
+private fun EventList(events: List<WaterEvent>) {
+    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+
     Column(
         modifier = Modifier
             .padding(top = 16.dp)
@@ -291,13 +296,20 @@ private fun EventList(events: List<Event>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         events.forEach { event ->
-            Text(text = event.description)
+            WateringCard(
+                date = dateFormat.format(event.date),
+                plantName = event.plantName,
+                waterAmount = event.waterAmount.toString()
+            )
         }
     }
 }
 
-
-data class Event(val date: Date, val description: String)
+data class WaterEvent(
+    val date: Date,
+    val plantName: String,
+    val waterAmount: Int
+)
 
 @Preview
 @Composable

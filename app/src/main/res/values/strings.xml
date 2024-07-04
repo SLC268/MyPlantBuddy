@@ -39,4 +39,5 @@
     <string name="delete">Delete</string>
     <string name="time_date">Time</string>
     <string name="water_amount">Water amount drop icon</string>
+    <string name="ml"> milliliters</string>
 </resources>

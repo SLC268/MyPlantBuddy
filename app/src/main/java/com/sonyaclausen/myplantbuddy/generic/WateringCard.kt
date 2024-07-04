@@ -30,7 +30,7 @@ import com.sonyaclausen.myplantbuddy.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun WateringCard() {
+fun WateringCard(date: String, plantName: String, waterAmount: String) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -59,7 +59,7 @@ fun WateringCard() {
                 }
                 Spacer(modifier = Modifier.size(4.dp))
                 Text(
-                    text = "Date",
+                    text = date,
                     style = MaterialTheme.typography.bodySmall
                 )
 
@@ -69,7 +69,7 @@ fun WateringCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Plant name",
+                    text = plantName,
                     style = MaterialTheme.typography.titleMedium
                 )
 
@@ -88,14 +88,14 @@ fun WateringCard() {
                 )
 
                 Text(
-                    text = "Water amount",
+                    text = waterAmount + stringResource(id = R.string.ml),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.weight(1f))
 
                 CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
                     Checkbox(
                         checked = false,
-                        onCheckedChange = { },
+                        onCheckedChange = { /*TODO*/  },
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
                 }
@@ -104,8 +104,8 @@ fun WateringCard() {
     }
 }
 
-@Preview
-@Composable
-fun PreviewWateringCard() {
-    WateringCard()
-}
+//@Preview
+//@Composable
+//fun PreviewWateringCard() {
+//    WateringCard()
+//}
