@@ -3,12 +3,21 @@ package com.sonyaclausen.myplantbuddy.screens
 import android.content.Context
 import android.content.res.Configuration
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.CameraAlt
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.LibraryBooks
+import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Divider
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,8 +26,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -29,15 +41,20 @@ import com.sonyaclausen.myplantbuddy.R
 import com.sonyaclausen.myplantbuddy.screens.calendar.MonthCalendarScreen
 import java.util.Locale
 
-sealed class Screen(val route: String, @StringRes val resourceId: Int) {
-    object Home : Screen("home", R.string.home)
-    object Calender : Screen("calender", R.string.calender)
-    object Library : Screen("library", R.string.library)
-    object More : Screen("more", R.string.more)
+sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
+    object Home : Screen("home", R.string.home, Icons.Outlined.Home)
+    object Calender : Screen("calender", R.string.calender, Icons.Outlined.CalendarMonth)
+    object Library : Screen("library", R.string.library, Icons.Outlined.LibraryBooks)
+    object More : Screen("more", R.string.more, Icons.Outlined.MoreHoriz)
 }
 
 @Composable
-fun MainScreen(onMyPlantsClick: () -> Unit, onCameraClick: () -> Unit, modifier: Modifier, onRouteClick: (String) -> Unit) {
+fun MainScreen(
+    onMyPlantsClick: () -> Unit,
+    onCameraClick: () -> Unit,
+    modifier: Modifier,
+    onRouteClick: (String) -> Unit
+) {
     val items = listOf(
         Screen.Home,
         Screen.Calender,
@@ -48,43 +65,73 @@ fun MainScreen(onMyPlantsClick: () -> Unit, onCameraClick: () -> Unit, modifier:
     var selectedLocale by remember { mutableStateOf(Locale.getDefault()) }
 
     val navController = rememberNavController()
-    Scaffold(modifier = modifier, bottomBar = {
-        BottomAppBar {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-            items.forEach { screen ->
-                BottomNavigationItem(icon = {
-                    Icon(
-                        Icons.Filled.Favorite, contentDescription = null
-                    )
-                },
-                    label = { Text(stringResource(screen.resourceId)) },
-                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                    onClick = {
-                        navController.navigate(screen.route) {
-                            // Pop up to the start destination of the graph to
-                            // avoid building up a large stack of destinations
-                            // on the back stack as users select items
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            // Avoid multiple copies of the same destination when
-                            // reselecting the same item
-                            launchSingleTop = true
-                            // Restore state when reselecting a previously selected item
-                            restoreState = true
-                        }
-                    })
+    Scaffold(
+        modifier = modifier,
+        bottomBar = {
+            Column {
+                Divider(color = MaterialTheme.colorScheme.primary, thickness = 1.dp)
+                BottomAppBar(containerColor = Color.Transparent) {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    items.forEach { screen ->
+                        NavigationBarItem(
+                            colors = NavigationBarItemDefaults.colors(
+                                indicatorColor = MaterialTheme.colorScheme.onSecondary
+                            ),
+                            icon = {
+                                Icon(
+                                    screen.icon,
+                                    contentDescription = stringResource(id = screen.resourceId),
+                                    tint = MaterialTheme.colorScheme.primary,
+
+                                )
+                            },
+                            label = {
+                                Text(
+                                    stringResource(screen.resourceId),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(top = 4.dp)
+                                )
+                            },
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    // Pop up to the start destination of the graph to
+                                    // avoid building up a large stack of destinations
+                                    // on the back stack as users select items
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    // Avoid multiple copies of the same destination when
+                                    // reselecting the same item
+                                    launchSingleTop = true
+                                    // Restore state when reselecting a previously selected item
+                                    restoreState = true
+                                }
+                            })
+                    }
+                }
             }
-        }
-    }) { innerPadding ->
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onCameraClick,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+            ) {
+                Icon(
+                    Icons.Outlined.CameraAlt,
+                    contentDescription = stringResource(id = R.string.add_plant)
+                )
+            }
+        },
+    ) { innerPadding ->
         NavHost(
             navController, startDestination = Screen.Home.route, modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
                 HomeScreen(
                     onMyPlantsClick = onMyPlantsClick,
-                    onCameraClick = onCameraClick,
                     modifier = modifier,
                 )
             }

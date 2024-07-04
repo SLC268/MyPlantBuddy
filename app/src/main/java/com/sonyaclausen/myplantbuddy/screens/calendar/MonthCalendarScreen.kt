@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -65,17 +64,20 @@ private fun ScreenContent(events: List<Event>) {
     val pagerState = rememberPagerState(initialPage = initialPage, pageCount = { calendarRange })
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Text(
-                    text = stringResource(id = R.string.calender), color = MaterialTheme.colorScheme.primary
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.calender),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }, colors = topAppBarColors(
+                    containerColor = Color.Transparent
                 )
-            }, colors = topAppBarColors(
-                containerColor = Color.Transparent
             )
-        )
-    }) { innerPadding ->
+        }
+    ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
@@ -93,7 +95,8 @@ private fun ScreenContent(events: List<Event>) {
                         pagerState.scrollToPage(
                             page + 1
                         )
-                    } },
+                    }
+                },
                 pagerState = pagerState,
                 currentMonth = currentMonth,
                 selectedDateEvents = selectedDateEvents,
@@ -158,10 +161,16 @@ private fun CalenderControls(
         horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
     ) {
         IconButton(onClick = { onPreviousClick.invoke(page) }) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(id = R.string.prev_month))
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(id = R.string.prev_month)
+            )
         }
         IconButton(onClick = { onNextClick.invoke(page) }) {
-            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(id = R.string.next_month))
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowForward,
+                contentDescription = stringResource(id = R.string.next_month)
+            )
         }
     }
 }
