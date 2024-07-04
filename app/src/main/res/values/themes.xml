@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.MyPlantBuddy" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.MyPlantBuddy.Starting" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
+        <item name="windowSplashScreenBackground">#FFFFFF</item>
+        <item name="postSplashScreenTheme">@style/Theme.MyPlantBuddy</item>
+    </style>
 </resources>
