@@ -89,7 +89,7 @@ private fun ScreenContent(
         FloatingActionButton(
             onClick =onCameraClick,
         ) {
-            Icon(Icons.Outlined.CameraAlt, contentDescription = "Add plant")
+            Icon(Icons.Outlined.CameraAlt, contentDescription = stringResource(id = R.string.add_plant))
         }
 
 //        Button(
@@ -353,7 +353,7 @@ private fun MyPlantsBar(onClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = stringResource(id = R.string.my_plants), fontWeight = FontWeight.Bold)
-                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "To My plants")
+                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(id = R.string.to_my_plants))
             }
 
         }

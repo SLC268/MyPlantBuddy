@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,11 +29,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sonyaclausen.myplantbuddy.R
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -40,52 +47,84 @@ import java.util.Locale
 fun MonthCalendarScreen() {
     //TODO: remove when actual data comes in
     val events = listOf(
-        Event(Date(), "Event 1"),
-        Event(Date(), "Event 2")
+        Event(Date(), "Event 1"), Event(Date(), "Event 2")
     )
 
     ScreenContent(events)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun ScreenContent(events: List<Event>) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Month Calendar",
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                },
-                colors = topAppBarColors(
-                    containerColor = Color.Transparent
+    val currentMonth = remember { mutableStateOf(Calendar.getInstance()) }
+    val selectedDateEvents = remember { mutableStateOf<List<Event>>(listOf()) }
+
+    val calendarRange = 1200
+    val initialPage = calendarRange / 2
+
+    val pagerState = rememberPagerState(initialPage = initialPage, pageCount = { calendarRange })
+    val coroutineScope = rememberCoroutineScope()
+
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = R.string.calender), color = MaterialTheme.colorScheme.primary
                 )
+            }, colors = topAppBarColors(
+                containerColor = Color.Transparent
             )
-        }
-    ) { innerPadding ->
+        )
+    }) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            CalendarWithEvents(events = events)
+            CalendarWithEvents(
+                events = events,
+                onPreviousClick = { page ->
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(
+                            page - 1
+                        )
+                    }
+                },
+                onNextClick = { page ->
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(
+                            page + 1
+                        )
+                    } },
+                pagerState = pagerState,
+                currentMonth = currentMonth,
+                selectedDateEvents = selectedDateEvents,
+                initialPage = initialPage
+            )
         }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun CalendarWithEvents(events: List<Event>) {
-    val currentMonth = remember { mutableStateOf(Calendar.getInstance()) }
-    val selectedDateEvents = remember { mutableStateOf<List<Event>>(listOf()) }
-
+private fun CalendarWithEvents(
+    events: List<Event>,
+    onNextClick: (Int) -> Unit,
+    onPreviousClick: (Int) -> Unit,
+    pagerState: PagerState,
+    currentMonth: MutableState<Calendar>,
+    selectedDateEvents: MutableState<List<Event>>,
+    initialPage: Int,
+) {
     HorizontalPager(
-        modifier = Modifier.fillMaxSize(),
-        state = rememberPagerState(initialPage = 0,pageCount = { Int.MAX_VALUE / 2 }),
-        verticalAlignment = Alignment.Top
+        modifier = Modifier.fillMaxSize(), state = pagerState, verticalAlignment = Alignment.Top
+
     ) { page ->
-        val month = currentMonth.value.clone() as Calendar
-        month.add(Calendar.MONTH, page - Int.MAX_VALUE / 2)
+        val baseCalendar = currentMonth.value.clone() as Calendar
+        val monthOffset = page - initialPage
+        baseCalendar.add(Calendar.MONTH, monthOffset)
+        val monthName =
+            baseCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+        val year = baseCalendar.get(Calendar.YEAR)
+
 
         Column(
             modifier = Modifier
@@ -93,18 +132,18 @@ private fun CalendarWithEvents(events: List<Event>) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Display month and year
-            val monthName = month.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
-            val year = month.get(Calendar.YEAR)
             Text(
                 text = "$monthName $year",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(bottom = 16.dp)
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 16.dp),
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold
             )
 
-            CalenderControls(currentMonth, page)
+            CalenderControls(onPreviousClick, onNextClick, page)
 
-            CalendarGrid(events, month, selectedDateEvents)
+
+            CalendarGrid(events, baseCalendar, selectedDateEvents)
 
             EventList(selectedDateEvents.value)
         }
@@ -112,25 +151,25 @@ private fun CalendarWithEvents(events: List<Event>) {
 }
 
 @Composable
-private fun CalenderControls(currentMonth: MutableState<Calendar>, currentPage: Int) {
+private fun CalenderControls(
+    onPreviousClick: (Int) -> Unit, onNextClick: (Int) -> Unit, page: Int
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
     ) {
-        IconButton(onClick = {
-            currentMonth.value.add(Calendar.MONTH, -1)
-        }) {
-            Icon(Icons.Default.ArrowBack, contentDescription = "Previous Month")
+        IconButton(onClick = { onPreviousClick.invoke(page) }) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(id = R.string.prev_month))
         }
-        IconButton (onClick = {
-            currentMonth.value.add(Calendar.MONTH, 1)
-        }) {
-            Icon(Icons.Default.ArrowForward, contentDescription = "Next Month")
+        IconButton(onClick = { onNextClick.invoke(page) }) {
+            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = stringResource(id = R.string.next_month))
         }
     }
 }
 
 @Composable
-private fun CalendarGrid(events: List<Event>, currentMonth: Calendar, selectedDateEvents: MutableState<List<Event>>) {
+private fun CalendarGrid(
+    events: List<Event>, currentMonth: Calendar, selectedDateEvents: MutableState<List<Event>>
+) {
     val daysInMonth = currentMonth.getActualMaximum(Calendar.DAY_OF_MONTH)
     val firstDayOfMonth = currentMonth.clone() as Calendar
 
@@ -146,7 +185,8 @@ private fun CalendarGrid(events: List<Event>, currentMonth: Calendar, selectedDa
         items(allDays.size) { index ->
             val day = allDays[index]
             val textColor = if (day <= 0) Color.Transparent else Color.Black
-            val currentDay = if (day <= 0) "" else day.toString()            // Determine the events for this day
+            val currentDay = if (day <= 0) "" else day.toString()
+
             val eventsForDay = events.filter { event ->
                 val eventCalendar = Calendar.getInstance()
                 eventCalendar.time = event.date
@@ -169,7 +209,9 @@ private fun CalendarGrid(events: List<Event>, currentMonth: Calendar, selectedDa
                     .clickable {
                         // On day click, update selected date events
                         selectedDateEvents.value = eventsForDay
-                    }, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+                    },
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = currentDay,
@@ -189,14 +231,14 @@ private fun EventList(events: List<Event>) {
     Column(
         modifier = Modifier
             .padding(top = 16.dp)
-            .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         events.forEach { event ->
             Text(text = event.description)
         }
     }
 }
-
 
 
 data class Event(val date: Date, val description: String)

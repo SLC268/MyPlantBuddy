@@ -28,4 +28,15 @@
     <string name="cancel">Cancel</string>
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
+    <string name="prev_month">Previous month</string>
+    <string name="next_month">Next month</string>
+    <string name="back_arrow">Back arrow</string>
+    <string name="to_my_plants">To my plants</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="add_plant">Add plant</string>
+    <string name="delete">Delete</string>
+    <string name="time_date">Time</string>
+    <string name="water_amount">Water amount drop icon</string>
 </resources>

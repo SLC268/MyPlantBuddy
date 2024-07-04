@@ -29,4 +29,15 @@
     <string name="cancel">Annuller</string>
     <string name="old_password">Gammelt kodeord</string>
     <string name="new_password">Nyt kodeord</string>
+    <string name="prev_month">Forrige måned</string>
+    <string name="next_month">Næste måned</string>
+    <string name="back_arrow">Tilbage pil</string>
+    <string name="to_my_plants">Til mine planter</string>
+    <string name="profile_picture">Profil billede</string>
+    <string name="hide_password">Skjul kodeord</string>
+    <string name="show_password">Vis kodeord</string>
+    <string name="add_plant">Tilføj plante</string>
+    <string name="delete">Slet</string>
+    <string name="time_date">Time</string>
+    <string name="water_amount">Water amount drop icon</string>
 </resources>

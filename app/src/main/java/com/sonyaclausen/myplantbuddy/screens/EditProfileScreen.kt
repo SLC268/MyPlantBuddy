@@ -56,7 +56,7 @@ private fun ScreenContent(onCancelClick: () -> Unit) {
                 navigationIcon = {
                     Icon(
                         Icons.Default.ArrowBack,
-                        contentDescription = "Back Icon",
+                        contentDescription = stringResource(id = R.string.back_arrow),
                         modifier = Modifier.clickable { /*TODO*/ })
                 },
                 title = {
@@ -95,7 +95,7 @@ private fun EditProfileDetails(modifier: Modifier = Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(R.drawable.profile),
-            contentDescription = "Profile Picture",
+            contentDescription = stringResource(id = R.string.profile_picture),
             modifier = Modifier.size(200.dp)
         )
         OutlinedTextField(
@@ -160,7 +160,9 @@ private fun ShowHidePassword(label: String) {
             IconButton(onClick = { showPassword = !showPassword }) {
                 Icon(
                     imageVector = if (showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = if (showPassword) "Hide password" else "Show password"
+                    contentDescription = if (showPassword) stringResource(id = R.string.hide_password) else stringResource(
+                        id = R.string.show_password
+                    )
                 )
             }
         }

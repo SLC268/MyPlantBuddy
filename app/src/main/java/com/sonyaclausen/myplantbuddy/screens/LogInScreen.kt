@@ -141,7 +141,7 @@ private fun ShowHidePassword() {
                 IconButton(onClick = { showPassword = false }) {
                     Icon(
                         imageVector = Icons.Filled.Visibility,
-                        contentDescription = "hide_password"
+                        contentDescription = stringResource(id = R.string.hide_password)
                     )
                 }
             } else {
@@ -149,7 +149,7 @@ private fun ShowHidePassword() {
                     onClick = { showPassword = true }) {
                     Icon(
                         imageVector = Icons.Filled.VisibilityOff,
-                        contentDescription = "hide_password"
+                        contentDescription = stringResource(id = R.string.show_password)
                     )
                 }
             }

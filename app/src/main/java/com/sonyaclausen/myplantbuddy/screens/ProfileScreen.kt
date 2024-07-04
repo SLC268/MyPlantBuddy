@@ -56,7 +56,7 @@ private fun ScreenContent(onEditClick: () -> Unit) {
                 navigationIcon = {
                     Icon(
                         Icons.Default.ArrowBack,
-                        contentDescription = "Back Icon",
+                        contentDescription = stringResource(id = R.string.back_arrow),
                         modifier = Modifier.clickable { /*TODO*/ })
                 },
                 title = {
@@ -71,7 +71,7 @@ private fun ScreenContent(onEditClick: () -> Unit) {
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(
                             imageVector = Icons.Default.DeleteOutline,
-                            contentDescription = "Delete Icon",
+                            contentDescription = stringResource(id = R.string.delete),
                             tint = Color.Red
                         )
                     }
@@ -101,7 +101,7 @@ private fun ProfileDetails(modifier: Modifier = Modifier, onEditClick: () -> Uni
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             painter = painterResource(R.drawable.profile),
-            contentDescription = "Profile Picture",
+            contentDescription = stringResource(id = R.string.profile_picture),
             modifier = Modifier.size(200.dp)
         )
         OutlinedTextField(
@@ -124,7 +124,7 @@ private fun ProfileDetails(modifier: Modifier = Modifier, onEditClick: () -> Uni
         Button(onClick = onEditClick) {
             Icon(
                 imageVector = Icons.Default.Edit,
-                contentDescription = "Edit Icon"
+                contentDescription = stringResource(id = R.string.edit_profile)
             )
         }
     }
@@ -157,7 +157,9 @@ private fun ShowHidePassword() {
             IconButton(onClick = { showPassword = !showPassword }) {
                 Icon(
                     imageVector = if (showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = if (showPassword) "Hide password" else "Show password"
+                    contentDescription = if (showPassword) stringResource(id = R.string.hide_password) else stringResource(
+                        id = R.string.show_password
+                    )
                 )
             }
         }
