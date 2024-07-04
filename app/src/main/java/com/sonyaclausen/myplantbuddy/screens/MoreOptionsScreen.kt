@@ -37,7 +37,7 @@ import com.sonyaclausen.myplantbuddy.Community
 import com.sonyaclausen.myplantbuddy.Profile
 import com.sonyaclausen.myplantbuddy.R
 import com.sonyaclausen.myplantbuddy.SavedSearches
-import com.sonyaclausen.myplantbuddy.generic.MoreOptionsCard
+import com.sonyaclausen.myplantbuddy.generic.GridCard
 import java.util.Locale
 
 @Composable
@@ -108,7 +108,7 @@ private fun CardGridOptions(
 
 @Composable
 private fun CardItem(card: MenuOption, onClick: () -> Unit) {
-    MoreOptionsCard(
+    GridCard(
         image = painterResource(id = card.imageRes),
         title = stringResource(id = card.titleRes),
         onClick = onClick

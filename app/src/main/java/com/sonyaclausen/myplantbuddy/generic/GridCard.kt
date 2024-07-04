@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.sonyaclausen.myplantbuddy.R
 
 @Composable
-fun MoreOptionsCard(image: Painter, title: String, onClick: () -> Unit) {
+fun GridCard(image: Painter, title: String, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .background(
@@ -62,7 +62,7 @@ fun MoreOptionsCard(image: Painter, title: String, onClick: () -> Unit) {
 @Preview
 @Composable
 fun MoreOptionsCardPreview() {
-    MoreOptionsCard(
+    GridCard(
         image = painterResource(id = R.drawable.profile),
         title = stringResource(id = R.string.profile),
         onClick = {}
