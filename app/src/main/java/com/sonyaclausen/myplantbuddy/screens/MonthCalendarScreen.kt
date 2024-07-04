@@ -1,4 +1,4 @@
-package com.sonyaclausen.myplantbuddy.screens.calendar
+package com.sonyaclausen.myplantbuddy.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable

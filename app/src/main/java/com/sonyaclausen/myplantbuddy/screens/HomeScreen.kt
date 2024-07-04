@@ -1,6 +1,7 @@
 package com.sonyaclausen.myplantbuddy.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -270,16 +273,25 @@ private fun CircleBackgroundIcon(icon: ImageVector, modifier: Modifier) {
 
 @Composable
 private fun WaterStreakAnimation() {
-    val composition by rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.water_streak)
+    //TODO: add logic to switch between blue and red streaks
+    val selected = remember { mutableStateOf(true) }
+    val compositionBlue by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.water_streak_blue)
+    )
+
+    val compositionRed by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.water_streak_red)
     )
 
     LottieAnimation(
-        composition = composition,
+        composition = if(selected.value) compositionBlue else compositionRed,
         modifier = Modifier
             .fillMaxWidth()
-            .height(400.dp),
-        iterations = LottieConstants.IterateForever
+            .height(400.dp)
+            .clickable {
+                selected.value = !selected.value
+            },
+        iterations = LottieConstants.IterateForever,
     )
 }
 

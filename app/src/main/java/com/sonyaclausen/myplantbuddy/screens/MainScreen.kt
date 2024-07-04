@@ -38,7 +38,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sonyaclausen.myplantbuddy.R
-import com.sonyaclausen.myplantbuddy.screens.calendar.MonthCalendarScreen
 import java.util.Locale
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
