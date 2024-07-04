@@ -13,6 +13,7 @@ import com.sonyaclausen.myplantbuddy.screens.EditProfileScreen
 import com.sonyaclausen.myplantbuddy.screens.LogInScreen
 import com.sonyaclausen.myplantbuddy.screens.MainScreen
 import com.sonyaclausen.myplantbuddy.screens.MyPlantsScreen
+import com.sonyaclausen.myplantbuddy.screens.PlantDetailScreen
 import com.sonyaclausen.myplantbuddy.screens.ProfileScreen
 import com.sonyaclausen.myplantbuddy.screens.SavedSearchesScreen
 import com.sonyaclausen.myplantbuddy.screens.camera.CameraRecogScreen
@@ -60,6 +61,9 @@ object CareBot
 @Serializable
 object EditProfile
 
+@Serializable
+object PlantDetail
+
 
 //https://developer.android.com/guide/navigation/design/nested-graphs#compose
 @Composable
@@ -103,6 +107,7 @@ fun AppNavHost(
                             popUpTo(route = Home.toString()) { inclusive = true }
                         }
                     },
+                    onCardClick = { navController.navigate(route = PlantDetail.toString()) },
                     modifier = modifier,
                 )
             }
@@ -120,7 +125,7 @@ fun AppNavHost(
                 CareBotScreen()
             }
             composable(route = Profile.toString()) {
-                ProfileScreen( onEditClick = { navController.navigate(route = EditProfile.toString()) })
+                ProfileScreen(onEditClick = { navController.navigate(route = EditProfile.toString()) })
             }
             composable(route = Community.toString()) {
                 CommunityScreen()
@@ -132,6 +137,14 @@ fun AppNavHost(
                 EditProfileScreen(onCancelClick = {
                     navController.navigate(route = Profile.toString()) {
                         popUpTo(route = Profile.toString()) { inclusive = true }
+                    }
+                })
+            }
+            //TODO: plant id
+            composable(route = PlantDetail.toString()) {
+                PlantDetailScreen(onBackPress = {
+                    navController.navigate(route = MyPlants.toString()) {
+                        popUpTo(route = MyPlants.toString()) { inclusive = true }
                     }
                 })
             }
