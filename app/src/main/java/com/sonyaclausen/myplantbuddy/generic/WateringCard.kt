@@ -1,8 +1,10 @@
 package com.sonyaclausen.myplantbuddy.generic
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -45,14 +47,9 @@ fun WateringCard() {
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "Plant name",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f)
-                )
-
                 Box() {
                     Icon(
                         imageVector = Icons.Default.Schedule,
@@ -60,10 +57,23 @@ fun WateringCard() {
                         modifier = Modifier.size(24.dp),
                     )
                 }
+                Spacer(modifier = Modifier.size(4.dp))
                 Text(
                     text = "Date",
                     style = MaterialTheme.typography.bodySmall
                 )
+
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Plant name",
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+
             }
 
             Row(
@@ -80,8 +90,7 @@ fun WateringCard() {
                 Text(
                     text = "Water amount",
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.weight(1f)
-                )
+                    modifier = Modifier.weight(1f))
 
                 CompositionLocalProvider(LocalMinimumInteractiveComponentEnforcement provides false) {
                     Checkbox(
