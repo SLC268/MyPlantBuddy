@@ -76,6 +76,8 @@ dependencies {
     implementation ("com.google.accompanist:accompanist-coil:0.13.0")
     implementation ("io.coil-kt:coil-compose:2.2.2")
     implementation ("io.coil-kt:coil-svg:2.2.2")
+    implementation ("com.google.accompanist:accompanist-pager:0.13.0")
+    implementation ("androidx.compose.foundation:foundation:1.4.3")
 
     //lottiefiles
     //implementation(libs.android.lottie.compose)
