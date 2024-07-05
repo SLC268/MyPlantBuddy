@@ -86,7 +86,7 @@ private fun MyPlantsGrid(
         verticalArrangement = Arrangement.spacedBy(34.dp)
     ) {
         items(20) {
-            GridCard(image = image, title = "Rubber Plant", onCardClick)
+            GridCard(image = image, title = "Rubber Plant", number = null, onCardClick)
         }
     }
 }
