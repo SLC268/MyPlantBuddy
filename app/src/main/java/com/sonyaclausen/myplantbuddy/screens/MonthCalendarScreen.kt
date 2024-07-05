@@ -1,6 +1,5 @@
 package com.sonyaclausen.myplantbuddy.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -66,7 +65,7 @@ fun MonthCalendarScreen() {
         WaterEvent(Date(), "Plant 4", 200),
         WaterEvent(Calendar.getInstance().apply { set(2024, 7, 22) }.time, "Plant 5", 200),
         WaterEvent(Date(), "Plant 6", 200),
-        WaterEvent(date= Date(2024,7,16), "Plant 7", 200),
+        WaterEvent(date = Date(2024, 7, 16), "Plant 7", 200),
     )
 
     ScreenContent(events)
@@ -119,7 +118,7 @@ private fun ScreenContent(events: List<WaterEvent>) {
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
         ) {
             CalendarWithEvents(
                 events = events,
@@ -175,7 +174,7 @@ private fun CalendarWithEvents(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(start = 16.dp, end = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CalenderControls(onPreviousClick, onNextClick, page, monthName, year)
@@ -255,8 +254,9 @@ private fun CalendarGrid(
                         eventCalendar.get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH)
             }
 
-            val boxBackground = if (day > 0 && selectedDate.value == day) MaterialTheme.colorScheme.primary else
-                if (day > 0) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
+            val boxBackground =
+                if (day > 0 && selectedDate.value == day) MaterialTheme.colorScheme.primary else
+                    if (day > 0) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
 
             Box(
                 modifier = Modifier
@@ -288,7 +288,9 @@ private fun CalendarGrid(
                             Icons.Outlined.WaterDrop,
                             contentDescription = stringResource(id = R.string.water_amount),
                             tint = Color.Blue,
-                            modifier = Modifier.size(12.dp).padding(top = 2.dp)
+                            modifier = Modifier
+                                .size(12.dp)
+                                .padding(top = 2.dp)
                         )
                     } else {
                         Spacer(modifier = Modifier.size(12.dp))

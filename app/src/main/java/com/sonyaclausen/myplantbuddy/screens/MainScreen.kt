@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -153,4 +154,15 @@ fun updateLocale(context: Context, locale: Locale) {
     config.setLocale(locale)
     context.resources.updateConfiguration(config, context.resources.displayMetrics)
     context.applicationContext.createConfigurationContext(config)
+}
+
+@Preview
+@Composable
+fun MainScreenPreview() {
+    MainScreen(
+        onMyPlantsClick = {},
+        onCameraClick = {},
+        modifier = Modifier,
+        onRouteClick = {}
+    )
 }
