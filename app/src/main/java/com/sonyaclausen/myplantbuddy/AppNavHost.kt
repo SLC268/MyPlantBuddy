@@ -125,7 +125,11 @@ fun AppNavHost(
                 CareBotScreen()
             }
             composable(route = Profile.toString()) {
-                ProfileScreen(onEditClick = { navController.navigate(route = EditProfile.toString()) })
+                ProfileScreen(
+                    onEditClick = { navController.navigate(route = EditProfile.toString()) },
+                    onBackPress = {
+                        navController.popBackStack()
+                    })
             }
             composable(route = Community.toString()) {
                 CommunityScreen()
@@ -135,6 +139,10 @@ fun AppNavHost(
             }
             composable(route = EditProfile.toString()) {
                 EditProfileScreen(onCancelClick = {
+                    navController.navigate(route = Profile.toString()) {
+                        popUpTo(route = Profile.toString()) { inclusive = true }
+                    }
+                }, onBackPress = {
                     navController.navigate(route = Profile.toString()) {
                         popUpTo(route = Profile.toString()) { inclusive = true }
                     }
@@ -148,6 +156,7 @@ fun AppNavHost(
                     }
                 })
             }
+
         }
     }
 }

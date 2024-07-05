@@ -1,7 +1,6 @@
 package com.sonyaclausen.myplantbuddy.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Visibility
@@ -41,44 +40,46 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sonyaclausen.myplantbuddy.R
+import com.sonyaclausen.myplantbuddy.generic.multipleEventsCutter
 
 @Composable
-fun ProfileScreen( onEditClick: () -> Unit) {
-    ScreenContent(onEditClick = onEditClick)
+fun ProfileScreen(onEditClick: () -> Unit, onBackPress: () -> Unit) {
+    ScreenContent(onEditClick = onEditClick, onBackPress = onBackPress)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ScreenContent(onEditClick: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
+private fun ScreenContent(onEditClick: () -> Unit, onBackPress: () -> Unit) {
+    Scaffold(topBar = {
+        TopAppBar(navigationIcon = {
+            multipleEventsCutter { multipleEventsCutterManager ->
+                IconButton(
+                    onClick = { multipleEventsCutterManager.processEvent(onBackPress) },
+                ) {
                     Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = stringResource(id = R.string.back_arrow),
-                        modifier = Modifier.clickable { /*TODO*/ })
-                },
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.profile),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                },
-                colors = topAppBarColors(
-                    containerColor = Color.Transparent
-                ), actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = Icons.Default.DeleteOutline,
-                            contentDescription = stringResource(id = R.string.delete),
-                            tint = Color.Red
+                        Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = stringResource(
+                            id = R.string.back_arrow
                         )
-                    }
+                    )
                 }
+            }
+        }, title = {
+            Text(
+                text = stringResource(id = R.string.profile),
+                color = MaterialTheme.colorScheme.primary
             )
-        }
-    ) { innerPadding ->
+        }, colors = topAppBarColors(
+            containerColor = Color.Transparent
+        ), actions = {
+            IconButton(onClick = onBackPress) {
+                Icon(
+                    imageVector = Icons.Default.DeleteOutline,
+                    contentDescription = stringResource(id = R.string.delete),
+                    tint = Color.Red
+                )
+            }
+        })
+    }) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -87,8 +88,7 @@ private fun ScreenContent(onEditClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ProfileDetails(
-                modifier = Modifier.padding(innerPadding),
-                onEditClick = onEditClick
+                modifier = Modifier.padding(innerPadding), onEditClick = onEditClick
             )
         }
     }
@@ -104,16 +104,14 @@ private fun ProfileDetails(modifier: Modifier = Modifier, onEditClick: () -> Uni
             contentDescription = stringResource(id = R.string.profile_picture),
             modifier = Modifier.size(200.dp)
         )
-        OutlinedTextField(
-            value = "",
+        OutlinedTextField(value = "",
             onValueChange = {},
             label = { Text(text = stringResource(id = R.string.username)) },
             modifier = Modifier
                 .padding(4.dp)
                 .width(250.dp)
         )
-        OutlinedTextField(
-            value = "",
+        OutlinedTextField(value = "",
             onValueChange = {},
             label = { Text(text = stringResource(id = R.string.email)) },
             modifier = Modifier
@@ -135,10 +133,9 @@ private fun ShowHidePassword() {
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
 
-    OutlinedTextField(
-        modifier = Modifier
-            .padding(4.dp)
-            .width(250.dp),
+    OutlinedTextField(modifier = Modifier
+        .padding(4.dp)
+        .width(250.dp),
         value = password,
         onValueChange = { newText ->
             password = newText
@@ -162,12 +159,11 @@ private fun ShowHidePassword() {
                     )
                 )
             }
-        }
-    )
+        })
 }
 
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen(onEditClick = {})
+    ProfileScreen(onEditClick = {}, onBackPress = {})
 }

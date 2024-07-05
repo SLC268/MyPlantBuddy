@@ -2,6 +2,8 @@ package com.sonyaclausen.myplantbuddy.screens
 
 import android.content.Context
 import android.content.res.Configuration
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -65,6 +67,14 @@ fun MainScreen(
     var selectedLocale by remember { mutableStateOf(Locale.getDefault()) }
 
     val navController = rememberNavController()
+
+    val activity = (LocalContext.current as? ComponentActivity)
+
+    BackHandler {
+        // Finish the activity to exit the app
+        activity?.finish()
+    }
+
     Scaffold(
         modifier = modifier,
         bottomBar = {

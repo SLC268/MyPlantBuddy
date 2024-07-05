@@ -1,7 +1,6 @@
 package com.sonyaclausen.myplantbuddy.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,21 +43,26 @@ import androidx.compose.ui.unit.dp
 import com.sonyaclausen.myplantbuddy.R
 
 @Composable
-fun EditProfileScreen(onCancelClick: () -> Unit) {
-    ScreenContent(onCancelClick = onCancelClick)
+fun EditProfileScreen(onCancelClick: () -> Unit, onBackPress: () -> Unit) {
+    ScreenContent(onCancelClick = onCancelClick, onBackPress = onBackPress)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ScreenContent(onCancelClick: () -> Unit) {
+private fun ScreenContent(onCancelClick: () -> Unit, onBackPress: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
                 navigationIcon = {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = stringResource(id = R.string.back_arrow),
-                        modifier = Modifier.clickable { /*TODO*/ })
+                    IconButton(
+                        onClick = onBackPress,
+                    ) {
+                        Icon(
+                            Icons.Outlined.ArrowBack, contentDescription = stringResource(
+                                id = R.string.back_arrow
+                            )
+                        )
+                    }
                 },
                 title = {
                     Text(
@@ -173,5 +178,5 @@ private fun ShowHidePassword(label: String) {
 @Preview
 @Composable
 fun PreviewEditProfileScreen() {
-    EditProfileScreen(onCancelClick = {})
+    EditProfileScreen(onCancelClick = {}, onBackPress = {})
 }
