@@ -65,7 +65,7 @@ fun MonthCalendarScreen() {
         WaterEvent(Date(), "Plant 4", 200),
         WaterEvent(Calendar.getInstance().apply { set(2024, 7, 22) }.time, "Plant 5", 200),
         WaterEvent(Date(), "Plant 6", 200),
-        WaterEvent(date = Date(2024, 7, 16), "Plant 7", 200),
+        WaterEvent(date = Date(2024, Calendar.JULY, 16), "Plant 7", 200),
     )
 
     ScreenContent(events)
@@ -89,7 +89,7 @@ private fun ScreenContent(events: List<WaterEvent>) {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.calender),
+                        text = stringResource(id = R.string.calendar),
                         color = MaterialTheme.colorScheme.primary
                     )
                 },
@@ -243,7 +243,8 @@ private fun CalendarGrid(
     LazyVerticalGrid(columns = GridCells.Fixed(7)) {
         items(allDays.size) { index ->
             val day = allDays[index]
-            val textColor = if (day <= 0) Color.Transparent else Color.Black
+            val selected = selectedDate.value == day
+            val textColor = if (day <= 0) Color.Transparent else if (selected) MaterialTheme.colorScheme.onPrimary else Color.Black
             val currentDay = if (day <= 0) "" else day.toString()
 
             val eventsForDay = events.filter { event ->
@@ -255,7 +256,7 @@ private fun CalendarGrid(
             }
 
             val boxBackground =
-                if (day > 0 && selectedDate.value == day) MaterialTheme.colorScheme.primary else
+                if (day > 0 && selected) MaterialTheme.colorScheme.primary else
                     if (day > 0) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
 
             Box(
@@ -287,7 +288,7 @@ private fun CalendarGrid(
                         Icon(
                             Icons.Outlined.WaterDrop,
                             contentDescription = stringResource(id = R.string.water_amount),
-                            tint = Color.Blue,
+                            tint = if (selected) MaterialTheme.colorScheme.onPrimary else Color.Blue,
                             modifier = Modifier
                                 .size(12.dp)
                                 .padding(top = 2.dp)
@@ -339,4 +340,3 @@ data class WaterEvent(
 fun MonthCalendarScreenPreview() {
     MonthCalendarScreen()
 }
-

@@ -105,8 +105,10 @@ fun WateringCard(date: String, plantName: String, waterAmount: String) {
     }
 }
 
-//@Preview
-//@Composable
-//fun PreviewWateringCard() {
-//    WateringCard()
-//}
+@Preview
+@Composable
+fun PreviewWateringCard() {
+    WateringCard(   date = "Today at 10:00 AM",
+        plantName = "Monstera",
+        waterAmount = "200")
+}

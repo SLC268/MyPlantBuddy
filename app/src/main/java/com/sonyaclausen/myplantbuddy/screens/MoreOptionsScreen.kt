@@ -42,9 +42,7 @@ import java.util.Locale
 
 @Composable
 fun MoreOptionsScreen(
-    selectedLocale: Locale,
-    onClick: (Locale) -> Unit,
-    onRouteClick: (String) -> Unit
+    selectedLocale: Locale, onClick: (Locale) -> Unit, onRouteClick: (String) -> Unit
 ) {
     ScreenContent(selectedLocale = selectedLocale, onClick = onClick, onRouteClick = onRouteClick)
 }
@@ -52,36 +50,28 @@ fun MoreOptionsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ScreenContent(
-    selectedLocale: Locale,
-    onClick: (Locale) -> Unit,
-    onRouteClick: (String) -> Unit
+    selectedLocale: Locale, onClick: (Locale) -> Unit, onRouteClick: (String) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.more),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                },
-                colors = topAppBarColors(
-                    containerColor = Color.Transparent
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    text = stringResource(id = R.string.more),
+                    color = MaterialTheme.colorScheme.primary
                 )
+            }, colors = topAppBarColors(
+                containerColor = Color.Transparent
             )
-        }
-    ) { innerPadding ->
+        )
+    }) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding),
         ) {
             SwitchLanguageToggle(selectedLocale = selectedLocale, onClick = onClick)
             Spacer(modifier = Modifier.height(16.dp))
-            CardGridOptions(
-                cards = cardsList(),
-                onCardClick = {
-                    onRouteClick(it.route)
-                }
-            )
+            CardGridOptions(cards = cardsList(), onCardClick = {
+                onRouteClick(it.route)
+            })
 
         }
     }
@@ -90,8 +80,7 @@ private fun ScreenContent(
 
 @Composable
 private fun CardGridOptions(
-    cards: List<MenuOption>,
-    onCardClick: (MenuOption) -> Unit
+    cards: List<MenuOption>, onCardClick: (MenuOption) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -135,8 +124,7 @@ private fun SwitchLanguageToggle(selectedLocale: Locale, onClick: (Locale) -> Un
             Text(text = stringResource(id = R.string.switch_lang))
         }
         Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd
+            modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd
         ) {
             Row {
                 list.forEach {
@@ -159,12 +147,22 @@ fun MoreOptionsScreenPreview() {
 
 
 enum class MenuOption(
-    @DrawableRes val imageRes: Int,
-    @StringRes val titleRes: Int,
-    val route: String
+    @DrawableRes val imageRes: Int, @StringRes val titleRes: Int, val route: String
 ) {
-    CARE_BOT(R.drawable.bot_icon, R.string.care_bot, CareBot.toString()),
-    PROFILE(R.drawable.profile, R.string.profile, Profile.toString()),
-    COMMUNITY(R.drawable.community_icon, R.string.community, Community.toString()),
+    CARE_BOT(
+        R.drawable.bot_icon,
+        R.string.care_bot,
+        CareBot.toString()
+    ),
+    PROFILE(
+        R.drawable.profile,
+        R.string.profile,
+        Profile.toString()
+    ),
+    COMMUNITY(
+        R.drawable.community_icon,
+        R.string.community,
+        Community.toString()
+    ),
     SAVED_SEARCHES(R.drawable.saved_heart, R.string.saved, SavedSearches.toString()),
 }

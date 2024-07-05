@@ -45,7 +45,7 @@ import java.util.Locale
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
     object Home : Screen("home", R.string.home, Icons.Outlined.Home)
-    object Calender : Screen("calender", R.string.calender, Icons.Outlined.CalendarMonth)
+    object Calender : Screen("calender", R.string.calendar, Icons.Outlined.CalendarMonth)
     object Library : Screen("library", R.string.library, Icons.Outlined.LibraryBooks)
     object More : Screen("more", R.string.more, Icons.Outlined.MoreHoriz)
 }
