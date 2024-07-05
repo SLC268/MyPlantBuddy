@@ -43,4 +43,7 @@
     <string name="ml">millilitre</string>
     <string name="edit">Edit</string>
     <string name="month">month</string>
+    <string name="sign_up">Sign up</string>
+    <string name="register">Register</string>
+    <string name="repeat_password">Repeat password</string>
 </resources>

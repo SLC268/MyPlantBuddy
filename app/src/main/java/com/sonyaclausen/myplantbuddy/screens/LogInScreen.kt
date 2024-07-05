@@ -1,6 +1,5 @@
 package com.sonyaclausen.myplantbuddy.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,10 +47,10 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.sonyaclausen.myplantbuddy.R
 
 @Composable
-fun LogInScreen(onLoginComplete: () -> Unit, modifier: Modifier) {
+fun LogInScreen(onLoginComplete: () -> Unit, onCreateClick: () -> Unit) {
     ScreenContent(
         onLoginComplete = onLoginComplete,
-        modifier = modifier
+        onCreateClick = onCreateClick
     )
 }
 
@@ -59,7 +58,7 @@ fun LogInScreen(onLoginComplete: () -> Unit, modifier: Modifier) {
 @Composable
 private fun ScreenContent(
     onLoginComplete: () -> Unit,
-    modifier: Modifier = Modifier
+    onCreateClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -92,7 +91,8 @@ private fun ScreenContent(
             PlantsWateringAnimation()
             LoginFields()
             LoginButtons(
-                onClick = onLoginComplete
+                onClick = onLoginComplete,
+                onCreateClick = onCreateClick
             )
         }
     }
@@ -159,7 +159,7 @@ private fun ShowHidePassword() {
 }
 
 @Composable
-private fun LoginButtons(onClick: () -> Unit) {
+private fun LoginButtons(onClick: () -> Unit, onCreateClick: () -> Unit = {}) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         LoginButton {
             {}
@@ -177,7 +177,7 @@ private fun LoginButtons(onClick: () -> Unit) {
             color = Color.Gray,
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .clickable { /* TODO */ }
+                .clickable { onCreateClick() }
                 .padding(16.dp)
         )
         Text(
@@ -219,5 +219,5 @@ private fun PlantsWateringAnimation() {
 @Preview
 @Composable
 fun LogInScreenPreview() {
-    LogInScreen(onLoginComplete = {}, modifier = Modifier)
+    LogInScreen(onLoginComplete = {}, onCreateClick = {})
 }
