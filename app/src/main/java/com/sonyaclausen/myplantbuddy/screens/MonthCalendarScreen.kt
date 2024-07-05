@@ -1,5 +1,6 @@
 package com.sonyaclausen.myplantbuddy.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,11 +8,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -19,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,7 +61,12 @@ fun MonthCalendarScreen() {
     //TODO: remove when actual data comes in
     val events = listOf(
         WaterEvent(Date(), "Plant 1", 100),
-        WaterEvent(Date(), "Plant 2", 200)
+        WaterEvent(Date(), "Plant 2", 200),
+        WaterEvent(Calendar.getInstance().apply { set(2024, 7, 11) }.time, "Plant 3", 200),
+        WaterEvent(Date(), "Plant 4", 200),
+        WaterEvent(Calendar.getInstance().apply { set(2024, 7, 22) }.time, "Plant 5", 200),
+        WaterEvent(Date(), "Plant 6", 200),
+        WaterEvent(date= Date(2024,7,16), "Plant 7", 200),
     )
 
     ScreenContent(events)
@@ -65,6 +77,7 @@ fun MonthCalendarScreen() {
 private fun ScreenContent(events: List<WaterEvent>) {
     val currentMonth = remember { mutableStateOf(Calendar.getInstance()) }
     val selectedDateEvents = remember { mutableStateOf<List<WaterEvent>>(listOf()) }
+    val selectedDate = remember { mutableStateOf(-1) }
 
     val calendarRange = 1200
     val initialPage = calendarRange / 2
@@ -127,7 +140,8 @@ private fun ScreenContent(events: List<WaterEvent>) {
                 pagerState = pagerState,
                 currentMonth = currentMonth,
                 selectedDateEvents = selectedDateEvents,
-                initialPage = initialPage
+                initialPage = initialPage,
+                selectedDate = selectedDate
             )
         }
     }
@@ -143,6 +157,7 @@ private fun CalendarWithEvents(
     currentMonth: MutableState<Calendar>,
     selectedDateEvents: MutableState<List<WaterEvent>>,
     initialPage: Int,
+    selectedDate: MutableState<Int>
 ) {
     HorizontalPager(
         modifier = Modifier.fillMaxSize(),
@@ -157,17 +172,15 @@ private fun CalendarWithEvents(
             baseCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
         val year = baseCalendar.get(Calendar.YEAR)
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             CalenderControls(onPreviousClick, onNextClick, page, monthName, year)
 
-            CalendarGrid(events, baseCalendar, selectedDateEvents)
+            CalendarGrid(events, baseCalendar, selectedDateEvents, selectedDate)
 
             EventList(selectedDateEvents.value)
         }
@@ -214,7 +227,8 @@ private fun CalenderControls(
 private fun CalendarGrid(
     events: List<WaterEvent>,
     currentMonth: Calendar,
-    selectedDateEvents: MutableState<List<WaterEvent>>
+    selectedDateEvents: MutableState<List<WaterEvent>>,
+    selectedDate: MutableState<Int>
 ) {
     val daysInMonth = currentMonth.getActualMaximum(Calendar.DAY_OF_MONTH)
     val firstDayOfMonth = currentMonth.clone() as Calendar
@@ -225,8 +239,8 @@ private fun CalendarGrid(
     val days = (1..daysInMonth).toList()
     val paddingDaysBefore = List(startingDayOfWeek) { -1 }
     val paddingDaysAfter = List((7 - (startingDayOfWeek + daysInMonth) % 7) % 7) { -1 }
-
     val allDays = paddingDaysBefore + days + paddingDaysAfter
+
     LazyVerticalGrid(columns = GridCells.Fixed(7)) {
         items(allDays.size) { index ->
             val day = allDays[index]
@@ -236,28 +250,23 @@ private fun CalendarGrid(
             val eventsForDay = events.filter { event ->
                 val eventCalendar = Calendar.getInstance()
                 eventCalendar.time = event.date
-                eventCalendar.get(Calendar.DAY_OF_MONTH) == day && eventCalendar.get(
-                    Calendar.MONTH
-                ) == currentMonth.get(
-                    Calendar.MONTH
-                )
+
+                eventCalendar.get(Calendar.DAY_OF_MONTH) == day &&
+                        eventCalendar.get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH)
             }
 
-            // Display dots for each event
-            val eventDots = buildString {
-                repeat(eventsForDay.size) {
-                    append("• ")
-                }
-            }
+            val boxBackground = if (day > 0 && selectedDate.value == day) MaterialTheme.colorScheme.primary else
+                if (day > 0) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
 
             Box(
                 modifier = Modifier
                     .padding(vertical = 6.dp, horizontal = 2.dp)
                     .background(
-                        color = if (day > 0) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent,
+                        color = boxBackground,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .clickable {
+                        selectedDate.value = day
                         selectedDateEvents.value = eventsForDay
                     }
                     .fillMaxSize(),
@@ -274,13 +283,24 @@ private fun CalendarGrid(
                         text = currentDay,
                         color = textColor,
                     )
-                    Text(
-                        text = eventDots,
-                        color = Color.Blue,
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                    if (eventsForDay.isNotEmpty()) {
+                        Icon(
+                            Icons.Outlined.WaterDrop,
+                            contentDescription = stringResource(id = R.string.water_amount),
+                            tint = Color.Blue,
+                            modifier = Modifier.size(12.dp).padding(top = 2.dp)
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.size(12.dp))
+                    }
                 }
             }
+        }
+    }
+    DisposableEffect(currentMonth) {
+        onDispose {
+            selectedDate.value = -1
+            selectedDateEvents.value = listOf()
         }
     }
 }
@@ -289,18 +309,19 @@ private fun CalendarGrid(
 private fun EventList(events: List<WaterEvent>) {
     val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .padding(top = 16.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        events.forEach { event ->
+        items(events) { event ->
             WateringCard(
                 date = dateFormat.format(event.date),
                 plantName = event.plantName,
                 waterAmount = event.waterAmount.toString()
             )
+            Spacer(modifier = Modifier.padding(8.dp))
         }
     }
 }

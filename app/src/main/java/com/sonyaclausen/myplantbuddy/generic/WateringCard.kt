@@ -72,8 +72,6 @@ fun WateringCard(date: String, plantName: String, waterAmount: String) {
                     text = plantName,
                     style = MaterialTheme.typography.titleMedium
                 )
-
-
             }
 
             Row(
