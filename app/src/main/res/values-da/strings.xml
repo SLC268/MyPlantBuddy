@@ -49,4 +49,9 @@
     <string name="type_password">Type password here</string>
     <string name="send_reset_email">Send email</string>
     <string name="reset_password_instructions">Enter email to reset password</string>
+    <string name="choose_image">Choose image</string>
+    <string name="camera_recog">Camera Recognition</string>
+    <string name="camera_click">Take a picture</string>
+    <string name="plant_match">Plant Match</string>
+    <string name="gallery_image">Photo gallery</string>
 </resources>

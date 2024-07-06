@@ -15,12 +15,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.sonyaclausen.myplantbuddy.R
 
 @Composable
-fun PlantMatchScreen( onBackPress: () -> Unit, onPlantClick: () -> Unit) {
-    ScreenContent(onBackPress = onBackPress, onPlantClick = onPlantClick)
+fun GalleryScreen(onBackPress: () -> Unit, onImageClick: () -> Unit) {
+    ScreenContent(onBackPress = {}, onImageClick = {})
 }
 
 @Composable
-private fun ScreenContent(onBackPress: () -> Unit, onPlantClick: () -> Unit) {
+private fun ScreenContent(onBackPress: () -> Unit, onImageClick: () -> Unit) {
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
@@ -29,11 +29,11 @@ private fun ScreenContent(onBackPress: () -> Unit, onPlantClick: () -> Unit) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = R.string.plant_match))
+            Text(text = stringResource(id = R.string.choose_image))
             Button(onClick = onBackPress) {
                 Text(text = "Go back")
             }
-            Button(onClick = onPlantClick) {
+            Button(onClick = onImageClick) {
                 Text(text = "Plant Match")
 
             }
@@ -43,6 +43,6 @@ private fun ScreenContent(onBackPress: () -> Unit, onPlantClick: () -> Unit) {
 
 @Preview
 @Composable
-fun PlantMatchScreenPreview() {
-    PlantMatchScreen(onBackPress = {}, onPlantClick = {})
+fun GalleryScreenPreview() {
+    GalleryScreen(onBackPress = {}, onImageClick = {})
 }
