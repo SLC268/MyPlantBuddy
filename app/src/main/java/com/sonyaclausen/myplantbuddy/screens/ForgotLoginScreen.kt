@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,23 +29,16 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.sonyaclausen.myplantbuddy.R
-import com.sonyaclausen.myplantbuddy.generic.ShowHidePassword
-
-
-@Composable
-fun RegisterScreen(onSignUpComplete: () -> Unit, onCancelClick: () -> Unit ) {
-    ScreenContent(onSignUpComplete = onSignUpComplete, onCancelClick = onCancelClick)
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ScreenContent(onCancelClick: () -> Unit, onSignUpComplete: () -> Unit) {
+fun ForgotLoginScreen(onCancelClick: () -> Unit, onResetComplete: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(id = R.string.register),
+                        text = stringResource(id = R.string.forgot_password),
                         color = MaterialTheme.colorScheme.primary
                     )
                 }, colors = topAppBarColors(
@@ -62,42 +54,29 @@ private fun ScreenContent(onCancelClick: () -> Unit, onSignUpComplete: () -> Uni
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PlantsWateringAnimation()
-            RegisterDetails()
-            ShowHidePassword(label = stringResource(id = R.string.password))
-            ShowHidePassword(label = stringResource(id = R.string.repeat_password))
-            RegisterButtons(onCancelClick = onCancelClick, onSignUpComplete = onSignUpComplete)
+            ForgottenDetails()
+            ForgottenButtons(onCancelClick = onCancelClick, onResetComplete = onResetComplete)
         }
 
     }
-
 }
 
 @Composable
-private fun RegisterDetails() {
-
+private fun ForgottenDetails() {
     //TODO get actual data to fill fields an verification
-    Column {
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = stringResource(id = R.string.username)) },
-            modifier = Modifier
-                .padding(4.dp)
-                .width(250.dp)
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = { Text(text = stringResource(id = R.string.email)) },
-            modifier = Modifier
-                .padding(4.dp)
-                .width(250.dp)
-        )
-    }
+    OutlinedTextField(
+        value = "",
+        onValueChange = {},
+        label = { Text(text = stringResource(id = R.string.email)) },
+        modifier = Modifier
+            .padding(4.dp)
+            .width(250.dp)
+    )
+
 }
 
 @Composable
-private fun RegisterButtons(onCancelClick: () -> Unit, onSignUpComplete: () -> Unit){
+private fun ForgottenButtons(onCancelClick: () -> Unit, onResetComplete: () -> Unit) {
     //TODO add verification
     Row {
         Button(onClick = onCancelClick) {
@@ -105,9 +84,10 @@ private fun RegisterButtons(onCancelClick: () -> Unit, onSignUpComplete: () -> U
 
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Button(onClick = onSignUpComplete) {
-            Text(text = stringResource(id = R.string.sign_up))
+        Button(onClick = onResetComplete) {
+            Text(text = stringResource(id = R.string.send_reset_email))
 
+            //TODO: toast/dialog that returns to login screen
         }
     }
 }
@@ -129,6 +109,6 @@ private fun PlantsWateringAnimation() {
 
 @Preview
 @Composable
-fun RegisterScreenPreview() {
-    RegisterScreen(onSignUpComplete = {}, onCancelClick = {})
+fun ForgotLoginScreenPreview() {
+    ForgotLoginScreen(onCancelClick = {}, onResetComplete = {})
 }

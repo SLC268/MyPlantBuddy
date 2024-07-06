@@ -1,8 +1,10 @@
 package com.sonyaclausen.myplantbuddy.screens
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +29,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.outlined.WaterDrop
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,9 +42,11 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -158,6 +165,9 @@ private fun CalendarWithEvents(
     initialPage: Int,
     selectedDate: MutableState<Int>
 ) {
+    var expanded by remember { mutableStateOf(false) }
+    val source = remember { MutableInteractionSource() }
+
     HorizontalPager(
         modifier = Modifier.fillMaxSize(),
         state = pagerState,
@@ -179,7 +189,21 @@ private fun CalendarWithEvents(
         ) {
             CalenderControls(onPreviousClick, onNextClick, page, monthName, year)
 
-            CalendarGrid(events, baseCalendar, selectedDateEvents, selectedDate)
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .animateContentSize()
+//                    .height(if (expanded) 400.dp else 300.dp)
+//                    .clickable(
+//                        interactionSource = source,
+//                        indication = null
+//                    ) {
+//                        expanded = !expanded
+//                    }
+//
+//            ) {
+                CalendarGrid(events, baseCalendar, selectedDateEvents, selectedDate)
+//            }
 
             EventList(selectedDateEvents.value)
         }
@@ -222,6 +246,7 @@ private fun CalenderControls(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CalendarGrid(
     events: List<WaterEvent>,
@@ -244,8 +269,9 @@ private fun CalendarGrid(
         items(allDays.size) { index ->
             val day = allDays[index]
             val selected = selectedDate.value == day
-            val textColor = if (day <= 0) Color.Transparent else if (selected) MaterialTheme.colorScheme.onPrimary else Color.Black
-            val currentDay = if (day <= 0) "" else day.toString()
+            val displayCell = day > 0
+            val textColor = if (!displayCell) Color.Transparent else if (selected) MaterialTheme.colorScheme.onPrimary else Color.Black
+            val currentDay = if (!displayCell) "" else day.toString()
 
             val eventsForDay = events.filter { event ->
                 val eventCalendar = Calendar.getInstance()
@@ -256,22 +282,22 @@ private fun CalendarGrid(
             }
 
             val boxBackground =
-                if (day > 0 && selected) MaterialTheme.colorScheme.primary else
-                    if (day > 0) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
+                if (displayCell && selected) MaterialTheme.colorScheme.primary else
+                    if (displayCell) MaterialTheme.colorScheme.secondaryContainer else Color.Transparent
 
-            Box(
+            if (displayCell) Card(
+                onClick = {
+                    selectedDate.value = day
+                    selectedDateEvents.value = eventsForDay
+                },
+                shape = RoundedCornerShape(8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = boxBackground,
+                    contentColor = textColor
+                ),
                 modifier = Modifier
                     .padding(vertical = 6.dp, horizontal = 2.dp)
-                    .background(
-                        color = boxBackground,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clickable {
-                        selectedDate.value = day
-                        selectedDateEvents.value = eventsForDay
-                    }
                     .fillMaxSize(),
-                contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,

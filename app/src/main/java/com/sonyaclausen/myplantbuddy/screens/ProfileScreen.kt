@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,22 +22,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sonyaclausen.myplantbuddy.R
 import com.sonyaclausen.myplantbuddy.generic.multipleEventsCutter
+import com.sonyaclausen.myplantbuddy.generic.ShowHidePassword
 
 @Composable
 fun ProfileScreen(onEditClick: () -> Unit, onBackPress: () -> Unit) {
@@ -118,7 +109,7 @@ private fun ProfileDetails(modifier: Modifier = Modifier, onEditClick: () -> Uni
                 .padding(4.dp)
                 .width(250.dp)
         )
-        ShowHidePassword()
+        ShowHidePassword(stringResource(id = R.string.password))
         Button(onClick = onEditClick) {
             Icon(
                 imageVector = Icons.Default.Edit,
@@ -126,40 +117,6 @@ private fun ProfileDetails(modifier: Modifier = Modifier, onEditClick: () -> Uni
             )
         }
     }
-}
-
-@Composable
-private fun ShowHidePassword() {
-    var password by remember { mutableStateOf("") }
-    var showPassword by remember { mutableStateOf(value = false) }
-
-    OutlinedTextField(modifier = Modifier
-        .padding(4.dp)
-        .width(250.dp),
-        value = password,
-        onValueChange = { newText ->
-            password = newText
-        },
-        label = {
-            Text(text = stringResource(id = R.string.password))
-        },
-        placeholder = { Text(text = "Type password here") },
-        visualTransformation = if (showPassword) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        trailingIcon = {
-            IconButton(onClick = { showPassword = !showPassword }) {
-                Icon(
-                    imageVector = if (showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = if (showPassword) stringResource(id = R.string.hide_password) else stringResource(
-                        id = R.string.show_password
-                    )
-                )
-            }
-        })
 }
 
 @Preview

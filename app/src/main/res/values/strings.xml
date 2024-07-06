@@ -45,4 +45,6 @@
     <string name="sign_up">Sign up</string>
     <string name="register">Register</string>
     <string name="repeat_password">Repeat password</string>
+    <string name="type_password">Type password here</string>
+    <string name="send_reset_email">Send email</string>
 </resources>

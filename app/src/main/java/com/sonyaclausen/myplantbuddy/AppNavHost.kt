@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sonyaclausen.myplantbuddy.screens.CareBotScreen
 import com.sonyaclausen.myplantbuddy.screens.CommunityScreen
 import com.sonyaclausen.myplantbuddy.screens.EditProfileScreen
+import com.sonyaclausen.myplantbuddy.screens.ForgotLoginScreen
 import com.sonyaclausen.myplantbuddy.screens.LogInScreen
 import com.sonyaclausen.myplantbuddy.screens.MainScreen
 import com.sonyaclausen.myplantbuddy.screens.MyPlantsScreen
@@ -65,6 +66,9 @@ object EditProfile
 @Serializable
 object PlantDetail
 
+@Serializable
+object ForgotLogin
+
 
 //https://developer.android.com/guide/navigation/design/nested-graphs#compose
 @Composable
@@ -97,6 +101,12 @@ fun AppNavHost(
                         }
 
                     }
+                )
+            }
+            composable(route = ForgotLogin.toString()) {
+                ForgotLoginScreen(
+                    onCancelClick = { navController.navigate(route = Login.toString()) },
+                    onResetComplete = { navController.navigate(route = Login.toString()) }
                 )
             }
             navigation(startDestination = Home.toString(), route = Main.toString()) {
