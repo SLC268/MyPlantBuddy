@@ -3,6 +3,7 @@ package com.sonyaclausen.myplantbuddy.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -110,12 +111,14 @@ private fun ProfileDetails(modifier: Modifier = Modifier, onEditClick: () -> Uni
                 .width(250.dp)
         )
         ShowHidePassword(stringResource(id = R.string.password))
-        Button(onClick = onEditClick) {
+        Button(onClick = onEditClick, modifier = Modifier.padding(top = 16.dp)) {
             Icon(
                 imageVector = Icons.Default.Edit,
-                contentDescription = stringResource(id = R.string.edit_profile)
+                contentDescription = stringResource(id = R.string.edit_profile),
+                
             )
         }
+
     }
 }
 

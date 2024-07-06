@@ -62,6 +62,7 @@ private fun ScreenContent(onCancelClick: () -> Unit, onSignUpComplete: () -> Uni
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PlantsWateringAnimation()
+            Spacer(modifier = Modifier.size(16.dp))
             RegisterDetails()
             ShowHidePassword(label = stringResource(id = R.string.password))
             ShowHidePassword(label = stringResource(id = R.string.repeat_password))
@@ -99,7 +100,7 @@ private fun RegisterDetails() {
 @Composable
 private fun RegisterButtons(onCancelClick: () -> Unit, onSignUpComplete: () -> Unit){
     //TODO add verification
-    Row {
+    Row(modifier = Modifier.padding(10.dp)) {
         Button(onClick = onCancelClick) {
             Text(text = stringResource(id = R.string.cancel))
 

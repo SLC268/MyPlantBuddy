@@ -47,10 +47,11 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.sonyaclausen.myplantbuddy.R
 
 @Composable
-fun LogInScreen(onLoginComplete: () -> Unit, onCreateClick: () -> Unit) {
+fun LogInScreen(onLoginComplete: () -> Unit, onCreateClick: () -> Unit, onForgotClick: () -> Unit) {
     ScreenContent(
         onLoginComplete = onLoginComplete,
-        onCreateClick = onCreateClick
+        onCreateClick = onCreateClick,
+        onForgotClick = onForgotClick
     )
 }
 
@@ -58,7 +59,8 @@ fun LogInScreen(onLoginComplete: () -> Unit, onCreateClick: () -> Unit) {
 @Composable
 private fun ScreenContent(
     onLoginComplete: () -> Unit,
-    onCreateClick: () -> Unit
+    onCreateClick: () -> Unit,
+    onForgotClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -92,7 +94,8 @@ private fun ScreenContent(
             LoginFields()
             LoginButtons(
                 onClick = onLoginComplete,
-                onCreateClick = onCreateClick
+                onCreateClick = onCreateClick,
+                onForgotClick = onForgotClick
             )
         }
     }
@@ -159,7 +162,7 @@ private fun ShowHidePassword() {
 }
 
 @Composable
-private fun LoginButtons(onClick: () -> Unit, onCreateClick: () -> Unit = {}) {
+private fun LoginButtons(onClick: () -> Unit, onCreateClick: () -> Unit = {}, onForgotClick: () -> Unit = {}) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         LoginButton {
             {}
@@ -186,7 +189,7 @@ private fun LoginButtons(onClick: () -> Unit, onCreateClick: () -> Unit = {}) {
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(16.dp)
-                .clickable { /* TODO */ })
+                .clickable { onForgotClick() })
     }
 }
 
@@ -219,5 +222,5 @@ private fun PlantsWateringAnimation() {
 @Preview
 @Composable
 fun LogInScreenPreview() {
-    LogInScreen(onLoginComplete = {}, onCreateClick = {})
+    LogInScreen(onLoginComplete = {}, onCreateClick = {}, onForgotClick = {})
 }

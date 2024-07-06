@@ -54,6 +54,7 @@ fun ForgotLoginScreen(onCancelClick: () -> Unit, onResetComplete: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PlantsWateringAnimation()
+            Spacer(modifier = Modifier.size(16.dp))
             ForgottenDetails()
             ForgottenButtons(onCancelClick = onCancelClick, onResetComplete = onResetComplete)
         }
@@ -64,6 +65,8 @@ fun ForgotLoginScreen(onCancelClick: () -> Unit, onResetComplete: () -> Unit) {
 @Composable
 private fun ForgottenDetails() {
     //TODO get actual data to fill fields an verification
+    Text(text = stringResource(id = R.string.reset_password_instructions))
+    Spacer(modifier = Modifier.size(10.dp))
     OutlinedTextField(
         value = "",
         onValueChange = {},
@@ -72,13 +75,12 @@ private fun ForgottenDetails() {
             .padding(4.dp)
             .width(250.dp)
     )
-
 }
 
 @Composable
 private fun ForgottenButtons(onCancelClick: () -> Unit, onResetComplete: () -> Unit) {
     //TODO add verification
-    Row {
+    Row(modifier = Modifier.padding(10.dp)) {
         Button(onClick = onCancelClick) {
             Text(text = stringResource(id = R.string.cancel))
 

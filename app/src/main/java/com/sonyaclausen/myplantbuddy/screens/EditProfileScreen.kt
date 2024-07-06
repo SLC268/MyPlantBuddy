@@ -115,7 +115,7 @@ private fun RegisterDetails(modifier: Modifier = Modifier) {
 @Composable
 private fun RegisterButtons(onCancelClick: () -> Unit) {
     //TODO add verification
-    Row {
+    Row(modifier = Modifier.padding(top = 16.dp)) {
         Button(onClick = onCancelClick) {
             Text(text = stringResource(id = R.string.cancel))
 

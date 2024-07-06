@@ -100,6 +100,13 @@ fun AppNavHost(
                             }
                         }
 
+                    },
+                    onForgotClick = {
+                        navController.navigate(route = ForgotLogin.toString()) {
+                            popUpTo(route = ForgotLogin.toString()) {
+                                inclusive = true
+                            }
+                        }
                     }
                 )
             }
