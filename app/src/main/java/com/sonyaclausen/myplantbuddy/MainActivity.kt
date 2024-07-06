@@ -8,9 +8,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.sonyaclausen.myplantbuddy.generic.CameraPreviewScreen
 import com.sonyaclausen.myplantbuddy.ui.theme.MyPlantBuddyTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,8 +35,7 @@ class MainActivity : ComponentActivity() {
                 this,
                 Manifest.permission.CAMERA
             ) -> {
-                // Camera permission already granted
-                // Implement camera related code
+
             }
             else -> {
                 cameraPermissionRequest.launch(Manifest.permission.CAMERA)
