@@ -81,6 +81,12 @@ dependencies {
     implementation ("androidx.compose.foundation:foundation:1.4.3")
     implementation("androidx.core:core-splashscreen:1.0.1")
 
+    // Camerax implementation
+    implementation (libs.androidx.camera.core)
+    implementation (libs.androidx.camera.camera2)
+    implementation (libs.androidx.camera.view)
+    implementation (libs.androidx.camera.lifecycle)
+
     //lottiefiles
     //implementation(libs.android.lottie.compose)
     implementation ("com.airbnb.android:lottie-compose:4.2.2")
