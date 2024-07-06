@@ -26,6 +26,7 @@ fun CameraRecogScreen(onBackPress: () -> Unit, onCameraClick: () -> Unit, onGall
 
 @Composable
 private fun ScreenContent(onBackPress: () -> Unit, onCameraClick: () -> Unit, onGalleryClick: () -> Unit) {
+
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
