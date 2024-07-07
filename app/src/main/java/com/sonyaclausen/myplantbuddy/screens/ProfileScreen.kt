@@ -43,7 +43,8 @@ fun ProfileScreen(onEditClick: () -> Unit, onBackPress: () -> Unit) {
 @Composable
 private fun ScreenContent(onEditClick: () -> Unit, onBackPress: () -> Unit) {
     Scaffold(topBar = {
-        TopAppBar(navigationIcon = {
+        TopAppBar(
+            navigationIcon = {
             multipleEventsCutter { multipleEventsCutterManager ->
                 IconButton(
                     onClick = { multipleEventsCutterManager.processEvent(onBackPress) },

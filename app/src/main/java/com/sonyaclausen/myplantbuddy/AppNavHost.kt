@@ -47,6 +47,9 @@ object Home
 object MyPlants
 
 @Serializable
+object PlantRecognitation
+
+@Serializable
 object Camera
 
 @Serializable
@@ -137,7 +140,7 @@ fun AppNavHost(
         navigation(startDestination = Home.toString(), route = Main.toString()) {
             composable(route = Home.toString()) {
                 MainScreen(onMyPlantsClick = { navController.navigate(route = MyPlants.toString()) },
-                    onCameraClick = { navController.navigate(route = Camera.toString()) },
+                    onCameraClick = { navController.navigate(route = PlantRecognitation.toString()) },
                     modifier = modifier,
                     onRouteClick = {
                         when (it) {
@@ -159,6 +162,43 @@ fun AppNavHost(
                     modifier = modifier,
                 )
             }
+            composable(route = CareBot.toString()) {
+                CareBotScreen()
+            }
+            composable(route = Profile.toString()) {
+                ProfileScreen(
+                    onEditClick = { navController.navigate(route = EditProfile.toString()) },
+                    onBackPress = {
+                        navController.popBackStack()
+                    })
+            }
+            composable(route = Community.toString()) {
+                CommunityScreen()
+            }
+            composable(route = SavedSearches.toString()) {
+                SavedSearchesScreen()
+            }
+            composable(route = EditProfile.toString()) {
+                EditProfileScreen(onCancelClick = {
+                    navController.navigate(route = Profile.toString()) {
+                        popUpTo(route = Profile.toString()) { inclusive = true }
+                    }
+                }, onBackPress = {
+                    navController.navigate(route = Profile.toString()) {
+                        popUpTo(route = Profile.toString()) { inclusive = true }
+                    }
+                })
+            }
+            //TODO: plant id
+            composable(route = PlantDetail.toString()) {
+                PlantDetailScreen(onBackPress = {
+                    navController.navigate(route = MyPlants.toString()) {
+                        popUpTo(route = MyPlants.toString()) { inclusive = true }
+                    }
+                })
+            }
+        }
+        navigation(startDestination = Camera.toString(), route = PlantRecognitation.toString()) {
             composable(route = Camera.toString()) {
                 CameraRecogScreen(
                     onBackPress = {
@@ -238,41 +278,6 @@ fun AppNavHost(
                         }
                     }
                 )
-            }
-            composable(route = CareBot.toString()) {
-                CareBotScreen()
-            }
-            composable(route = Profile.toString()) {
-                ProfileScreen(
-                    onEditClick = { navController.navigate(route = EditProfile.toString()) },
-                    onBackPress = {
-                        navController.popBackStack()
-                    })
-            }
-            composable(route = Community.toString()) {
-                CommunityScreen()
-            }
-            composable(route = SavedSearches.toString()) {
-                SavedSearchesScreen()
-            }
-            composable(route = EditProfile.toString()) {
-                EditProfileScreen(onCancelClick = {
-                    navController.navigate(route = Profile.toString()) {
-                        popUpTo(route = Profile.toString()) { inclusive = true }
-                    }
-                }, onBackPress = {
-                    navController.navigate(route = Profile.toString()) {
-                        popUpTo(route = Profile.toString()) { inclusive = true }
-                    }
-                })
-            }
-            //TODO: plant id
-            composable(route = PlantDetail.toString()) {
-                PlantDetailScreen(onBackPress = {
-                    navController.navigate(route = MyPlants.toString()) {
-                        popUpTo(route = MyPlants.toString()) { inclusive = true }
-                    }
-                })
             }
         }
     }

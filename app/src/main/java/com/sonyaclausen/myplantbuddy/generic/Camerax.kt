@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
+import androidx.camera.core.CameraControl
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -16,7 +18,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -27,32 +32,64 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Composable
-fun CameraPreviewScreen() {
-    val lensFacing = CameraSelector.LENS_FACING_BACK
+fun CameraPreviewScreen(onImageCaptured: () -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    val preview = Preview.Builder().build()
     val previewView = remember {
         PreviewView(context)
     }
-    val cameraxSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
-    val imageCapture = remember {
-        ImageCapture.Builder().build()
+
+    var cameraProvider: ProcessCameraProvider? by remember { mutableStateOf(null) }
+    //var cameraControl: CameraControl? by remember { mutableStateOf(null) }
+
+    LaunchedEffect(key1 = context) {
+        cameraProvider = getCameraProvider(context)
+
+        val cameraSelector =
+            CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+
+        val preview = Preview.Builder().build().also {
+            it.setSurfaceProvider(previewView.surfaceProvider)
+        }
+
+        val imageCapture = ImageCapture.Builder().build()
+
+        try {
+            cameraProvider?.unbindAll()
+            cameraProvider?.bindToLifecycle(
+                lifecycleOwner, cameraSelector, preview, imageCapture
+            )
+        } catch (ex: Exception) {
+            Log.e("CameraPreviewScreen", "Error binding camera", ex)
+        }
+
     }
-    LaunchedEffect(lensFacing) {
-        val cameraProvider = context.getCameraProvider()
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(lifecycleOwner, cameraxSelector, preview, imageCapture)
-        preview.setSurfaceProvider(previewView.surfaceProvider)
-    }
-    Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = Modifier.fillMaxSize()
+    ) {
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
-        Button(onClick = { captureImage(imageCapture, context) }) {
+
+        Button(onClick = { captureImage(context) { onImageCaptured() } }) {
             Text(text = "Capture Image")
         }
     }
 }
-private fun captureImage(imageCapture: ImageCapture, context: Context) {
+
+private suspend fun getCameraProvider(context: Context): ProcessCameraProvider {
+    return suspendCoroutine { continuation ->
+        ProcessCameraProvider.getInstance(context).apply {
+            addListener({
+                continuation.resume(get())
+            }, ContextCompat.getMainExecutor(context))
+        }
+    }
+}
+
+private fun captureImage(
+    context: Context,
+    onSuccess: () -> Unit
+) {
     val name = "CameraxImage.jpeg"
     val contentValues = ContentValues().apply {
         put(MediaStore.MediaColumns.DISPLAY_NAME, name)
@@ -68,26 +105,19 @@ private fun captureImage(imageCapture: ImageCapture, context: Context) {
             contentValues
         )
         .build()
+
+    val imageCapture = ImageCapture.Builder().build()
     imageCapture.takePicture(
         outputOptions,
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                println("Successs")
+                onSuccess()
             }
 
             override fun onError(exception: ImageCaptureException) {
-                println("Failed $exception")
+                Log.e("CameraCapture", "Error capturing image: $exception")
             }
-
-        })
-}
-
-private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
-    suspendCoroutine { continuation ->
-        ProcessCameraProvider.getInstance(this).also { cameraProvider ->
-            cameraProvider.addListener({
-                continuation.resume(cameraProvider.get())
-            }, ContextCompat.getMainExecutor(this))
         }
-    }
+    )
+}

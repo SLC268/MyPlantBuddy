@@ -16,7 +16,7 @@ import com.sonyaclausen.myplantbuddy.R
 
 @Composable
 fun GalleryScreen(onBackPress: () -> Unit, onImageClick: () -> Unit) {
-    ScreenContent(onBackPress = {}, onImageClick = {})
+    ScreenContent(onBackPress = onBackPress, onImageClick = onImageClick)
 }
 
 @Composable
